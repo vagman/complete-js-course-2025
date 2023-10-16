@@ -1,4 +1,4 @@
-'use strict'; // it has to be the first line of the code
+"use strict"; // it has to be the first line of the code
 
 // let hasDriversLicence = false;
 // const passTest = true;
@@ -40,7 +40,6 @@ TEST DATA 2: Dolphins scored 85, 54, and 41. Koalas scored 23, 34, and 27
 
 // checkWinner(scoreKoalas, scoreDolphins);
 
-
 // const bill = 100;
 // const tip;
 
@@ -66,54 +65,51 @@ TEST DATA: 125, 555, and 44.
 const bills = [125, 555, 44];
 
 let tip;
-const calcTip = bill => {
-    if (bill <= 300 && bill >= 50) {
-        return 0.15 * bill;
-    } else {
-        return 0.2 * bill;
-    }
-}
+const calcTip = (bill) => {
+  if (bill <= 300 && bill >= 50) {
+    return 0.15 * bill;
+  } else {
+    return 0.2 * bill;
+  }
+};
 
 const tips = [calcTip(bills[0]), calcTip(bills[1]), calcTip(bills[2])];
 const totals = [bills[0] + tips[0], bills[1] + tips[1], bills[2] + tips[2]];
 
-
 // Challenge at DOT vs Bracket Notation lecture:
 // Write the sentance "Jonas has 3 friends, and his best friend is called Michael." by using the object properties below
 const jonas = {
-    firstName: 'Jonas',
-    lastName: 'Schmedtmann',
-    age: 2037 - 1991,
-    job: 'teacher',
-    friends: ['Michael', 'Peter', 'Steven']
+  firstName: "Jonas",
+  lastName: "Schmedtmann",
+  age: 2037 - 1991,
+  job: "teacher",
+  friends: ["Michael", "Peter", "Steven"],
 };
 
-console.log(`${jonas.firstName} has ${jonas.friends.length} friends, and his best friend is called ${jonas.friends[0]}.`);
-
-
-
-
+console.log(
+  `${jonas.firstName} has ${jonas.friends.length} friends, and his best friend is called ${jonas.friends[0]}.`
+);
 
 // Example with Object Methods
 
 const jonas1 = {
-    firstName: 'Jonas',
-    lastName: 'Schmedtmann',
-    birthYear: 1991,
-    job: 'teacher',
-    friends: ['Michael', 'Peter', 'Steven'],
-    hasDriversLicense: true,
+  firstName: "Jonas",
+  lastName: "Schmedtmann",
+  birthYear: 1991,
+  job: "teacher",
+  friends: ["Michael", "Peter", "Steven"],
+  hasDriversLicense: true,
 
-    // BAD PRACTISE - ALWAYS DRY!
-    // calcAge: function () {
-    //     console.log(this);
-    //     return 2037 - this.birthYear;
-    // }
+  // BAD PRACTISE - ALWAYS DRY!
+  // calcAge: function () {
+  //     console.log(this);
+  //     return 2037 - this.birthYear;
+  // }
 
-    calcAge: function () {
-        this.age = 2037 - this.birthYear;
-        return this.age;
-    }
+  calcAge: function () {
+    this.age = 2037 - this.birthYear;
+    return this.age;
+  },
 };
 
 // console.log(jonas1.calcAge())
@@ -122,22 +118,24 @@ const jonas1 = {
 // Write a method called 'summary' that reutrns a string about Jonas object e.g. "Jonas is a 46-year-old teacher. He has/hasn't a driver's license."
 
 const jonas3 = {
-    firstName: 'Jonas',
-    lastName: 'Schmedtmann',
-    birthYear: 1991,
-    job: 'teacher',
-    friends: ['Michael', 'Peter', 'Steven'],
-    hasDriversLicense: true,
+  firstName: "Jonas",
+  lastName: "Schmedtmann",
+  birthYear: 1991,
+  job: "teacher",
+  friends: ["Michael", "Peter", "Steven"],
+  hasDriversLicense: true,
 
-    calcAge: function () {
-        this.age = 2037 - this.birthYear;
-        return this.age;
-    },
+  calcAge: function () {
+    this.age = 2037 - this.birthYear;
+    return this.age;
+  },
 
-    logSummary: function () {
-        //let hasDriversLicenseTXT = (this.hasDriversLicense) ? 'has' : 'hasn\'t'
-        return `${this.firstName} is a ${this.calcAge()}-year-old ${jonas3.job}. He ${this.hasDriversLicense ? 'has' : 'hasn\'t'} a driver's license.`;
-    }
+  logSummary: function () {
+    //let hasDriversLicenseTXT = (this.hasDriversLicense) ? 'has' : 'hasn\'t'
+    return `${this.firstName} is a ${this.calcAge()}-year-old ${
+      jonas3.job
+    }. He ${this.hasDriversLicense ? "has" : "hasn't"} a driver's license.`;
+  },
 };
 
 console.log(jonas3.logSummary());
@@ -153,30 +151,48 @@ Your tasks:
 TEST DATA: Marks weighs 78 kg and is 1.69 m tall. John weighs 92 kg and is 1.95 m tall.
 */
 const mark = {
-    fullName: 'Mark Miller',
-    mass: 78,
-    height: 1.69,
+  fullName: "Mark Miller",
+  mass: 78,
+  height: 1.69,
 
-    calcBMI: function () {
-        this.bmi = this.mass / (this.height ** 2);
-        return this.bmi;
-    }
+  calcBMI: function () {
+    this.bmi = this.mass / this.height ** 2;
+    return this.bmi;
+  },
 };
 
 const john = {
-    fullName: 'John Smith',
-    mass: 92,
-    height: 1.95,
+  fullName: "John Smith",
+  mass: 92,
+  height: 1.95,
 
-    calcBMI: function () {
-        this.bmi = this.mass / (this.height ** 2);
-        return this.bmi;
-    }
+  calcBMI: function () {
+    this.bmi = this.mass / this.height ** 2;
+    return this.bmi;
+  },
 };
 
 mark.calcBMI();
 john.calcBMI();
 
-console.log(`${john.calcBMI() > mark.calcBMI() ? john.fullName : mark.fullName}'s BMI (${john.calcBMI() > mark.calcBMI() ? john.bmi : mark.bmi}) is higher than ${john.calcBMI() < mark.calcBMI() ? john.fullName : mark.fullName}'s (${john.calcBMI() < mark.calcBMI() ? john.bmi : mark.bmi})!'`);
+console.log(
+  `${john.calcBMI() > mark.calcBMI() ? john.fullName : mark.fullName}'s BMI (${
+    john.calcBMI() > mark.calcBMI() ? john.bmi : mark.bmi
+  }) is higher than ${
+    john.calcBMI() < mark.calcBMI() ? john.fullName : mark.fullName
+  }'s (${john.calcBMI() < mark.calcBMI() ? john.bmi : mark.bmi})!'`
+);
 
+// Create a function that converts C to Kelvin
 
+const measurement = {
+  type: "temprature",
+  unit: "celcius",
+  value: Number(prompt("Degrees in Celsius:")),
+};
+
+const celciusToKelvin = (celcius) => {
+  return celcius + 273;
+};
+
+console.log(celciusToKelvin(measurement.value));
