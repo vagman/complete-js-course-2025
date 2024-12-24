@@ -99,3 +99,73 @@ if (population > 33) {
  7. Finally, convert numNeighbours to a number, and watch what happens now when you input 1.
  8. Reflect on why we should use the === operator and type conversion in this situation.
 */
+
+// const numNeighbours = Number(prompt('How many neighbour countries does your contry have?'));
+
+// if (numNeighbours === 1) {
+//     console.log('Only 1 border!');
+// } else if (numNeighbours > 1) {
+//     console.log('More than 1 border');
+// } else {
+//     console.log('No borders');
+// }
+
+/*
+    Logical Operators
+
+    Comment out the previous code so the prompt doesn't get in the way.
+    Let's say Sarah is looking for a new country to live in. She wants to live in a country that speaks English, has less than 50 million people and is not an island.
+    Write an if statement to help Sarah figure out if your country is right for her. You will need to write a condition that accounts for all of Sarah's criteria. Take your time with this, and check part of the solution if necessary.
+    If yours is the right country, log a strings like this 'You should live in Portugal :)'. If not, log 'Portugal does not meet your criteria :('.
+    Probably your country does not meet all the criteria. So go back and temporarily change some variables in order to make the condition true (unless you live in Canada :D).
+*/
+if ((population < 50) && (language === 'English') && (!isIsland)) {
+        console.log(`You should live in ${country} :)`);
+    } else {
+        console.log(`${country} does not meet your criteria :(`);
+    }
+
+/*
+    The switch Statement
+
+    Use a switch statement to log the following string for the given language:
+    chinese or mandarin: 'MOST number of native speakers!';
+    spanish: '2nd place in number of native speakers';
+    english: '3rd place';
+    hindi: 'Number 4';
+    arabic: '5th most spoken language';
+    for all other simply log 'Great language too :D'.
+*/
+
+switch(language) {
+    case 'chinese': 
+    case 'mandarin':
+        console.log('MOST number of native speakers!');
+        break;
+    case 'spanish':
+        console.log('2nd place in number of native speakers');
+        break;
+    case 'english':
+        console.log('3rd place');
+        break;
+    case 'hindi':
+        console.log('Number 4');
+        break;
+    case 'arabic':
+        console.log('5th most spoken language');
+        break;
+    default:
+        console.log('Great language too :D');
+}
+
+/*
+    The Conditional (Ternary) Operator
+
+    If your country's population is greater than 33 million, use the ternary operator to log a string like this to the console: "Portugal's population is above average". Otherwise, simply log "Portugal's population is below average". Notice how only one word change between these two sentences!
+    After checking the result, change the population temporarily to 13 and then to 130. See the different results, and set the population back to original.
+*/
+
+population > 33 ? console.log(`${country}'s population is above average`) : console.log(`${country}'s population is below average`);
+
+// even better
+console.log(`${country}'s population is ${population > 33 ? 'above' : 'below'} average  `);
