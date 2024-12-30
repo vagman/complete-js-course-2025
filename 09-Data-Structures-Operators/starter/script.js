@@ -4,6 +4,23 @@
 const flights =
   '_Delayed_Departure;fao93766109;txl2133758440;11:25+_Arrival;bru0943384722;fao93766109;11:45+_Delayed_Arrival;hel7439299980;fao93766109;12:05+_Departure;fao93766109;lis2323639855;12:30';
 
+let weekdays = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+
+const openingHours = {
+  [weekdays[3]]: {
+    open: 12,
+    close: 22,
+  },
+  [weekdays[4]]: {
+    open: 11,
+    close: 23,
+  },
+  [weekdays[5]]: {
+    open: 0, // Open 24 hours
+    close: 24,
+  },
+};
+
 // Data needed for first part of the section
 const restaurant = {
   name: 'Classico Italiano',
@@ -11,27 +28,13 @@ const restaurant = {
   categories: ['Italian', 'Pizzeria', 'Vegetarian', 'Organic'],
   starterMenu: ['Focaccia', 'Bruschetta', 'Garlic Bread', 'Caprese Salad'],
   mainMenu: ['Pizza', 'Pasta', 'Risotto'],
+  openingHours, // ES6 Enhanced object literals
 
-  openingHours: {
-    thu: {
-      open: 12,
-      close: 22,
-    },
-    fri: {
-      open: 11,
-      close: 23,
-    },
-    sat: {
-      open: 0, // Open 24 hours
-      close: 24,
-    },
-  },
-
-  order: function (starterIndex, mainIndex) {
+  order(starterIndex, mainIndex) {
     return [this.starterMenu[starterIndex], this.mainMenu[mainIndex]];
   },
 
-  orderDelivery: function ({
+  orderDelivery({
     starterIndex = 1,
     mainIndex = 0,
     time = '20:00',
@@ -41,27 +44,170 @@ const restaurant = {
       `Order received! ${this.starterMenu[starterIndex]} and ${this.mainMenu[mainIndex]} will be delivered to ${address} at ${time}`
     );
   },
+
+  orderPasta(ingredient1, ingredient2, ingredient3) {
+    console.log(`Here is your delicious pasta with ${ingredient1}, ${ingredient2}, ${ingredient3}.`);
+  },
+
+  orderPizza(mainIngredient, ...otheringredients) {
+    if (otheringredients.length === 0) {
+      console.log(`Here is your delicious pizza with only one ingredient: ${mainIngredient}.`);
+    } else {
+      let result = `Here is your delicious pizza with ${mainIngredient}, `;
+      for (let i = 0; i < otheringredients.length; i++) {
+        if (i === otheringredients.length - 1) {
+          console.log(`${result}and ${otheringredients[i]}.`);
+        } else {
+          result += otheringredients[i] + ', ';
+        }
+      }
+    }
+
+  }
 };
 
-// Spread Operator (...)
-const arr = [7, 8, 9];
-const badNewArr = [1, 2, arr[0], arr[1], arr[2]];
-console.log(badNewArr);
+// 1) Destructuring
+// SPREAD, because right side of = 
+const arr = [1, 2, ...[3, 4]];
 
-const newArr = [1, 2, ...arr];
-console.log(newArr);
+// RESRT, because on LEFT aside of =
+const [a, b, ...others] = [1, 2, 3, 4, 5];
+console.log(a, b, others);
 
-const newMenu = [...restaurant.mainMenu, 'Gnocci'];
-console.log(newMenu);
+const [pizza, , rissoto, ...otherFood] = [...restaurant.mainMenu, ...restaurant.starterMenu];
+console.log(pizza, rissoto, otherFood);
 
-// Copy array
-const mainMenuCopy= [...restaurant.mainMenu];
+// Objects
+// const { sat, ...weekdays } = restaurant.hours;
+// console.log(weekdays);
 
-// Join 2 arrays or more together
+// 2) Functions
+const add = function (...numbers) {
+  let sum = 0;
+  for (let i = 0; i < numbers.length; i++) {
+    sum += numbers[i];
+  }
+  console.log(sum);
+}
+
+// Usage examples of add()
+add(2, 3);
+add(5, 3, 7, 2);
+add(8, 2, 5, 3, 2, 1, 4);
+
+
+const x = [23, 5, 7];
+add(...x);
+
+restaurant.orderPizza('mushrooms', 'onions', 'olives', 'spinach');
+restaurant.orderPizza('mushrooms');
+
+console.log('------ OR ------');
+// Logical operator can use, return any data type, short-circuiting 
+console.log(3 || 'Jonas'); // First value (3) is truthy value, so its returned
+console.log('' || 'Jonas'); // 'Jonas' because '' is falsy value
+console.log(true || 0); // true, because its truthy value
+console.log(undefined || null); // null because undefined is falshy value adn we try short-circuiting with the second value !!!
+
+console.log(undefined || 0 || '' || 'Hello' || 23 || null); // Hello because it's the first truthy value starting from left
+
+// restaurant.numGuests = 23;
+// const guests1 = restaurant.numGuests ? restaurant.numGuests : 10;
+// console.log(guests1);
+
+// const guests2 = restaurant.numGuests || 10;
+// console.log(guests2);
+
+console.log('------ AND ------');
+console.log(0 && 'Jonas'); // First value is Falshy so it's returned
+console.log(7 && 'Jonas'); // 'Jonas', because both first and second values are Truthy, so the last one is returned
+console.log('Hello' && 23 && null && 'jonas'); // Hello is truthy value, 23 is Truthy value, null is falshy value so the rest of the evaluation is short-circuited and null is returned
+
+// Practical example: If Function exists
+if (restaurant.orderPizza) {
+  restaurant.orderPizza('mushrooms', 'spinach');
+}
+
+// Avoid if statement with && operator
+restaurant.orderPizza && restaurant.orderPizza('mushrooms', 'spinach');
+
+// ||: returns the first truthy value, last element if there arent any
+// &&: returns the first falshy value, last element if there arent any
+
+// Lecture: The Nullish Coalescing Operator (??)
+restaurant.numGuests = 0;
+const guests = restaurant.numGuests || 10;
+console.log(guests);
+
+// ??: Only Nullish values will shortcurcuit: null and undefined (NOT 0 or ''). Only if numGuests is null/undefined it will assign the value 10 to guestsCorrect.
+const guestsCorrect = restaurant.numGuests ?? 10;
+console.log(guestsCorrect);
+
+const rest1 = {
+  name: 'Capri',
+  // numGuests: 20,
+  numGuests: 0,
+};
+
+const rest2 = {
+  name: 'La Piazza',
+  owner: 'Giovanni Rossi',
+};
+
+// Assigning default value 10 if there in no NumGuests variable in the object
+// rest1.numGuests = rest1.numGuests || 10;
+// rest2.numGuests = rest2.numGuests || 10;
+// Shorter and same result as above
+// rest1.numGuests ||= 10;
+// rest2.numGuests ||= 10;
+
+// Nullish assignment operator (nul or undefined)
+rest1.numGuests ??= 10;
+rest2.numGuests ??= 10;
+
+// Make the owners name 'Anonymous' if it exists
+rest1.owner &&= 'Anonymous';
+rest2.owner &&= 'Anonymous';
+
+console.log(rest1);
+console.log(rest2);
+
+// Lecture: looping Arrays: The For-of loop
 const menu = [...restaurant.starterMenu, ...restaurant.mainMenu];
-console.log(menu);
 
-// Iterables: arrays, strings, maps, set, NOT OBJECTS!
-const str = 'Jonas';
-const letters = [...str,'', 'S.'];
-console.log(letters);
+for (const item of menu) { console.log(item); }
+
+for (const [i, el] of menu.entries()) {
+  console.log(`${i + 1}: ${el}`);
+}
+// console.log([...menu.entries()]);
+// Lecture: Optional chaining (.?)
+if (restaurant.openingHours.mon && restaurant.openingHours.mon) console.log(restaurant.openingHours.mon.open);
+
+// console.log(restaurant.openingHours.mon.open);
+
+// With optional chaining
+console.log(restaurant.openingHours.mon?.open);
+console.log(restaurant.openingHours?.mon?.open);
+
+// Example
+const days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+
+for (const day of days) {
+  const open = restaurant.openingHours[day]?.open ?? 'closed';
+  console.log(`On ${day}, we open at ${open}.`)
+}
+
+// Optional chaining used also with Methods
+console.log(restaurant.order?.(0, 1) ?? 'Method does not exist.');
+console.log(restaurant.orderRissoto?.(0, 1) ?? 'Method does not exist.')
+
+// Also wroks with Arrays
+const users = [{ name: 'Jonas', email: 'hello@jonas.io' }];
+console.log(users[0]?.name ?? 'Users array empty');
+
+if (users.length > 0) {
+  console.log(users[0].name)
+} else
+  console.log('User array empty'); {
+}
