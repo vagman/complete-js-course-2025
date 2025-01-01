@@ -236,3 +236,44 @@ const entries = Object.entries(openingHours);
 for (const [key, {open, close}] of entries) {
   console.log(`On ${key} we open at ${open} and close at ${close}.`);
 }
+
+// Lecture: Sets
+const orderSet = new Set([
+  'Pasta',
+  'Pizza',
+  'Pizza',
+  'Risotto',
+  'Pasta',
+  'Pizza']);
+
+console.log(orderSet);
+
+console.log(new Set('Jonas'));
+
+console.log(orderSet.size);
+
+// Similar to includes() for Arrays:
+console.log(orderSet.has('Pizza'));
+console.log(orderSet.has('Bread'));
+
+orderSet.add('Garlic Bread');
+orderSet.add('Garlic Bread');
+orderSet.delete('Risotto');
+
+console.log(orderSet);
+
+for (const order of orderSet) console.log(order);
+
+
+// Use case for Sets: remove duplicate values from arrays ! Example: 
+const staff = ['Waiter', 'Chef', 'Waiter', 'Manager', 'Chef', 'Waiter'];
+// Conversion from Set back to Array
+const staffUnique = [...new Set(staff)];
+console.log(staffUnique);
+
+// How many diffrent roles are in our business ?
+console.log(
+  new Set(['Waiter', 'Chef', 'Waiter', 'Manager', 'Chef', 'Waiter']).size);
+
+// How mnay diffrent letters are in a specific string ?
+console.log(new Set('jonasschmedtmann').size);
