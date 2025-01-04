@@ -328,7 +328,7 @@ for (let book = 0; book < books.length; book++) {
 
     6.1 There are objects in the books array that don't have the onlineContent property at all. Loop over the books array, and log a string to the console in this format: "${title}" provides no data about its online content.
 */
-console.log('----- 6.1 The Nullish Coalescing Operator (??) ------')
+console.log('----- 6 The Nullish Coalescing Operator (??) ------')
 // for (let i = 0; i < books.length; i++) {
 //     books[i].onlineContent ?? console.log(`${books[i].title} provides no data about its online content.`);
 // }
@@ -336,22 +336,137 @@ for (const book of books) {
     book.onlineContent ?? console.log(`${book.title} provides no data about its online content.`);
 }
 
+console.log('----- 7 Logical Assignments Operators -----')
+/*
+    7.1
+    Some of the book objects from the books array are missing the edition property. Loop over the books array, and assign this property with a number 1 (if it doesn't already exist). Use logical assignment operators.
+*/
+for (const book of books) {
+    book.edition ||= 1;
+    console.log('book.edition:', book.edition);
+}
 
+/*
+    7.2
+    Some of the book objects from the books array have the highlighted property, which by default is set to true. Iterate over the books array, and if the thirdParty.goodreads.rating property is less than 4.2, reassign it with false. Use the &&= operator (tip: you may also need the ! operator)
+*/
+console.log('----- 7.2 ------\n');
+for (const book of books) {
+    book.highlighted &&= !(book.thirdParty.goodreads.rating < 4.2);
+    console.log('Book has rating of:', book.thirdParty.goodreads.rating, ', Highlighted:', book.highlighted)
+}
 
+console.log('------ 8 Looping Arrays: The for-of Loop ------');
+/*
+    8.1 
+    Use the for-of loop to loop over the books array and sum the pages of all books. Use the pageSum variable below, and the pages property of the book objects.
+    let pageSum = 0;
+*/
+let pageSum = 0;
+for (const book of books) {
+    pageSum += book.pages;
+}
+console.log(`Total number of pages of all books: ${pageSum}.`);
 
+/*
+    8.2
+    Below is the allAuthors variable which stores an empty array. Use the for-of loop to fill allAuthors with the authors of each book from the books array.
+    Remember that each book object has the author property, which can be a string (if there is only a single author) or an array (if there are multiple authors). You may need to use the typeof operator. You can also use multiple loops if needed. The allAuthors array should have just one level (no nested arrays).
+    const allAuthors = [];
+*/
+console.log('----- 8.2 -----\n');
+const allAuthors = [];
+for (const book of books) {
+    if (typeof book.author === 'string') {
+        allAuthors.push(book.author);
+    } else {
+        allAuthors.push(...book.author);
+    }
+}
+console.log('All book authors:', allAuthors);
 
+/*
+    8.3
+    Use the for-of loop together with Array's entries() method to log each author from allAuthors to the console together with its index. Make the index start from 1, instead of 0.
+    Expected output
+    1. Robert Sedgewick
+    2. Kevin Wayne
+    3. Harold Abelson
+    ...                    // part removed for clarity
+    15. Cal Newport
+*/
+console.log('----- 8.3 ------\n');
+for (let [key, author] of Object.entries(allAuthors)) {
+    console.log(`${Number(key) + 1}.`, author);
+}
 
+// Enhanced Object Literals
+/*
+    9.1
+    Below is the bookData array that contains other arrays. Each inner array consists of the property name(first element), and the value(second element). For example, in ['title', 'Computer Networking: A Top-Down Approach'], 'title' is the property name, and 'Computer Networking: A Top-Down Approach' is meant to be the value assigned to that property name.
+    Using computed properties, fill the newBook object with the properties and values from the bookData array. The first one is done already.
+    
+*/
+console.log('----- 9.1 -----\n');
+const bookData = [
+    ['title', 'Computer Networking: A Top-Down Approach'],
+    ['author', ['James F. Kurose', 'Keith W. Ross']],
+    ['publisher', 'Addison Wesley'],
 
+];
+// Do the rest
+const newBook = {
+    [bookData[0][0]]: bookData[0][1],
+    [bookData[1][0]]: bookData[1][1],
+    [bookData[2][0]]: bookData[2][1]
+};
+console.log(newBook);
 
+/*
+    9.2
+    Below is the pages variable. Add it as a property of the newBook2 object. Use the shorter way.
+*/
+console.log('----- 9.2 -----\n');
+const pages = 880;
+const newBook2 = {
+    title: 'The C Programming Language',
+    author: ['Brian W. Kernighan', 'Dennis M. Ritchie'],
+    pages,
+}
+console.log(`newBook2 pages are: ${newBook2.pages}`);
 
-
-
-
-
-
-
-
-
-
-
+/*
+    Optional Chaining (?.)
+    10.1
+    Write a function called getFirstKeyword that takes the book object as an argument. This function should return the first keyword from the book's keywords property (array) or undefined (if the keywords property doesn't exist). It shouldn't throw an error. Use optional chaining for that.
+    Example 1
+    Code:
+        getFirstKeyword(book[0]);
+    Expected output:
+        "computer science"
+    Example 2
+    Code:
+        getFirstKeyword(newBook2); // from previous tasks
+    Expected output:
+        undefined
+*/
+console.log('----- 10.1 -----\n');
+function getFirstKeyword(book) {
+    return book.keywords?.[0];
+}
+console.log(getFirstKeyword(books[0]));
+console.log(getFirstKeyword(newBook2));
+/*
+    Looping Objects: Object Keys, Values and Entries
+    11.1
+    Below is the entries variable that stores an empty array. Use the for-of loop together with the Object.keys() method to loop over the thirdParty.goodreads property (array) of the first book object from the books array. For each key, push a new array that contains that key to the entries array.
+    In the end, the entries array should be filled with arrays containing keys:
+    [['rating'], ['ratingsCount'], ['reviewsCount'], ['fiveStartRatingCount'], ['oneStartRatingCount']]
+    const entries = [];
+*/
+console.log('----- 11.1 -----\n');
+const entries = [];
+for (const  of Object.keys(books)) {
+    console.log(key);
+}
 
