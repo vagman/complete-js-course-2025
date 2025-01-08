@@ -237,7 +237,10 @@ for (const [key, {open, close}] of entries) {
   console.log(`On ${key} we open at ${open} and close at ${close}.`);
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> f18e02502802c6854ad35d0da0785eac8781eb07
 // Lecture: Sets
 const orderSet = new Set([
   'Pasta',
