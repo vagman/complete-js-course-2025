@@ -66,7 +66,6 @@ for (const [, odd] of odds) {
 }
 console.log(`The average odd of the game is ${(sum / 3 * 10).toFixed(2)}%`);
 
-
 // 3. Print the 3 odds to the console, but in a nice formatted way, exaclty like this:
 // Odd of victory Bayern Munich: 1.33 
 // Odd of draw: 3.25 
