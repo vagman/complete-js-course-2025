@@ -236,3 +236,177 @@ const entries = Object.entries(openingHours);
 for (const [key, {open, close}] of entries) {
   console.log(`On ${key} we open at ${open} and close at ${close}.`);
 }
+
+
+// Lecture: Sets
+const orderSet = new Set([
+  'Pasta',
+  'Pizza',
+  'Pizza',
+  'Risotto',
+  'Pasta',
+  'Pizza']);
+
+console.log(orderSet);
+
+console.log(new Set('Jonas'));
+
+console.log(orderSet.size);
+
+// Similar to includes() for Arrays:
+console.log(orderSet.has('Pizza'));
+console.log(orderSet.has('Bread'));
+
+orderSet.add('Garlic Bread');
+orderSet.add('Garlic Bread');
+orderSet.delete('Risotto');
+
+console.log(orderSet);
+
+for (const order of orderSet) console.log(order);
+
+
+// Use case for Sets: remove duplicate values from arrays ! Example: 
+const staff = ['Waiter', 'Chef', 'Waiter', 'Manager', 'Chef', 'Waiter'];
+// Conversion from Set back to Array
+const staffUnique = [...new Set(staff)];
+console.log(staffUnique);
+
+// How many diffrent roles are in our business ?
+console.log(
+  new Set(['Waiter', 'Chef', 'Waiter', 'Manager', 'Chef', 'Waiter']).size);
+
+// How mnay diffrent letters are in a specific string ?
+console.log(new Set('jonasschmedtmann').size);
+
+// Lecture: New Operations to Make Sets Useful! ES 2025 
+const italianFoods = new Set([
+  'pasta',
+  'gnocchi',
+  'tomatoes',
+  'olive oil',
+  'garlic',
+  'basil',
+]);
+
+const mexicanFoods = new Set([
+  'tortillas',
+  'beans',
+  'rice',
+  'tomatoes',
+  'avocado',
+  'garlic',
+]);
+
+// Find which foods are in both of the sets
+const commonFoods = italianFoods.intersection(mexicanFoods);
+console.log('Intesection: ', commonFoods);
+// Convert it to an array by spread operator
+console.log('Array intersection:', [...commonFoods]);
+
+// Union method: All elements in 2 sets without the duplicates
+const italianMexicanFusion = italianFoods.union(mexicanFoods);
+console.log(italianMexicanFusion);
+
+// Union of arrays but with duplicates...(spread operator)
+const unionWithDuplicates = [...italianFoods, ...mexicanFoods];
+console.log(unionWithDuplicates);
+
+// Diffrent way without using union method...
+console.log([...new Set([...italianFoods, ...mexicanFoods])]);
+
+// Diffrence method: Elements that are in the FIRST set but NOT in the SECOND
+const uniqueItaliaFoods = italianFoods.difference(mexicanFoods);
+console.log('Difference Italian: ', uniqueItaliaFoods);
+const uniqueMexicanFoods = mexicanFoods.difference(italianFoods);
+console.log('Difference Mexican', uniqueMexicanFoods);
+
+// Unique italian and unique mexican foods but not the middle part (Ven diagram)
+const uniqueItalianAndMexicanFoods = italianFoods.symmetricDifference(mexicanFoods);
+console.log('Unique Italian and Unique Mexican foods: ', uniqueItalianAndMexicanFoods);
+
+// Last one for now,that was also added in ES2025
+console.log('Are Italian foods and Mexican foods sets completely different ?', italianFoods.isDisjointFrom(mexicanFoods));
+
+// Lecture: Maps Fundamentals
+const rest = new Map();
+rest.set('name', 'Classico Italiano');
+rest.set(1, 'Firenze, Italy');
+console.log(rest.set(2, 'Lisbon, Portugal'));
+
+rest.set('categories', ['Italian', 'Pizzeria', 'Vegetarian', 'Organic'])
+.set('open', 11)
+.set('close', 11)
+.set(true, 'We are open :D')
+.set(false, 'We are closed :(');
+
+console.log(rest.get('name'));
+console.log(rest.get(true));
+console.log(rest.get('true'));
+console.log(rest.get('1'));
+
+// Small little game
+const time = 21; // 9 p.m.
+// Boolean value that retrieves restaurant open or closed times and prints if it's open
+console.log('Is the restaurant open at 9 p.m. ?', rest.get(time > rest.get('open')) && time < rest.get('close')); 
+
+console.log('Does the restaurant have "categories" key ?', rest.has('categories'));
+
+// Delete elemets by Key: Lisbon restaurant has closed...
+console.log('Lisbon restaurant has to close: ', rest.delete(2));
+console.log(rest);
+
+// Retrieve size of the map
+console.log('How many items does the restaurant map has ?', rest.size);
+
+// Delete all elements of the map
+// rest.clear();
+// console.log(rest);
+
+const arr1 = [1, 2];
+rest.set(arr1, 'Test');
+rest.set(document.querySelector('h1'), 'Heading');
+console.log(rest);
+console.log(rest.size);
+
+console.log(rest.get(arr1));
+
+// Lecture: Maps Iterations
+const question = new Map([
+  ['question', 'What is the best programming language in the world ?'],
+  [1, 'C'],
+  [2, 'Java'],
+  [3, 'JavaScript'],
+  ['correct', 3],
+  [true, 'Correct 🎉'],
+  [false, 'Try again!']
+]);
+console.log(question);
+
+// Convert object to Map
+console.log('openingHours as an Array of Arrays:', openingHours);
+console.log(Object.entries(openingHours));
+const hoursMap = new Map(Object.entries(openingHours));
+console.log(hoursMap);
+
+// Map converted to Array and then destructured
+console.log(question.get('question'));
+for (const [key, value] of question) {
+  if (typeof(key) === 'number') {
+    console.log(`Answer ${key}: ${value}`);
+  }
+} 
+const answer = 3;
+// const answer = Number(prompt('Your answer: '));
+
+console.log(question.get(answer === question.get('correct')));
+
+// Convert map to array
+console.log(...question);
+// console.log(...question.entries()); Exactly as the above ...question
+console.log([...question.keys()]);
+console.log([...question.values()]);
+
+// Lecture: Arrays VS Sets VS Objects VS Maps
+
+// Lecture: 
