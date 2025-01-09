@@ -344,7 +344,7 @@ console.log(rest.get(true));
 console.log(rest.get('true'));
 console.log(rest.get('1'));
 
-// Small little game
+// Little game
 const time = 21; // 9 p.m.
 // Boolean value that retrieves restaurant open or closed times and prints if it's open
 console.log('Is the restaurant open at 9 p.m. ?', rest.get(time > rest.get('open')) && time < rest.get('close')); 
