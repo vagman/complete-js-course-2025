@@ -394,7 +394,7 @@ for (const [key, value] of question) {
   if (typeof(key) === 'number') {
     console.log(`Answer ${key}: ${value}`);
   }
-} 
+}
 const answer = 3;
 // const answer = Number(prompt('Your answer: '));
 
@@ -407,5 +407,4 @@ console.log([...question.keys()]);
 console.log([...question.values()]);
 
 // Lecture: Arrays VS Sets VS Objects VS Maps
-
 // Lecture: 
