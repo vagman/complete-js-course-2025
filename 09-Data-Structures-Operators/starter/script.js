@@ -407,4 +407,188 @@ console.log([...question.keys()]);
 console.log([...question.values()]);
 
 // Lecture: Arrays VS Sets VS Objects VS Maps
-// Lecture: 
+// Lecture: Working with String (Part 1)
+const airline = 'TAP Air Portugal';
+const plane = 'A320';
+
+console.log(plane[0]);
+console.log(plane[1]);
+console.log(plane[2]);
+
+console.log('B737'[0]);
+
+console.log(airline.length);
+console.log('B737'.length);
+
+console.log(airline.lastIndexOf('r'));
+console.log(airline.indexOf('portugal'));
+
+console.log(airline.slice(4));
+
+// End value is not included !!
+console.log(airline.slice(4, 7), 'which has length of', airline.slice(4, 7).length) 
+
+
+console.log(airline.slice(0, airline.indexOf(' ')));
+console.log(airline.slice(airline.lastIndexOf(' ') + 1));
+
+// Start etracting letters from string from the end
+console.log(airline.slice(-2));
+
+console.log(airline.slice(1, -2));
+
+const checkMiddleSeat = function(seat) {
+  // B and E are middle seats
+  const s = seat.slice(-1);
+  if (s === 'B' || s === 'E') { 
+    console.log('You got the middle seat :(')
+  } else {
+  console.log('You got lucky !!!')
+  }
+}
+
+checkMiddleSeat('11B');
+checkMiddleSeat('23C');
+checkMiddleSeat('3E');
+
+// Lecture: Working with Strings - Part 2
+
+console.log(airline.toLowerCase());
+console.log(airline.toUpperCase());
+
+// Fix capitalization in name
+const passenger = 'jOnAS'; // correct: Jonas
+
+// Step 1: All lower case
+const passengerLowerCase = passenger.toLowerCase();
+
+// Step 2: Capitalize the first letter obly
+const passengerCorrect = passengerLowerCase[0].toUpperCase() + passengerLowerCase.slice(1);
+
+console.log(passengerCorrect);
+
+// Exercise: make it as a function
+function passengerNameFixer(name) {
+  const nameToLowerCase = name.toLowerCase();
+  return nameToLowerCase[0].toUpperCase() + nameToLowerCase.slice(1);
+}
+
+console.log(passengerNameFixer('nAtaLIe'));
+console.log(passengerNameFixer('vaGGELiS'));
+
+// Comparing emails
+const email = 'hello@jonas.io';
+const loginEmail = '   Hello@Jonas.Io \n';
+
+// const lowerEmail = loginEmail.toLocaleLowerCase();
+// const trimmedEmail = lowerEmail.trim();
+
+const normalizedEmail = loginEmail.toLowerCase().trim();
+console.log(normalizedEmail);
+console.log(email === normalizedEmail);
+
+// Make it as a function
+function checkEmail (correctEmail, emailToCheck) {
+  if (correctEmail === emailToCheck.toLowerCase().trim()) return true;
+}
+console.log(checkEmail('hello@jonas.io', '\n   Hello@Jonas.Io \n\n\n\t\t\t'));
+
+// Replacing parts of strings
+const priceGB =  '288,97£';
+const priceUS = priceGB.replace('£', '$').replace(',','.');
+console.log(priceUS);
+
+const annoucement = 'All passengers come to boarding door 23. Boarding door 23!';
+
+console.log(annoucement.replaceAll('door', 'gate'));
+
+// Regular Expressions , g for global
+console.log(annoucement.replace(/door/g, 'gate'));
+
+// 3 methods that return Booleans: includes(), startsWith(), endsWith()
+const plane1 = 'Airbus A320neo';
+console.log(plane1.includes('A320'));
+console.log(plane1.includes('Boeing'));
+console.log(plane1.startsWith('Air'));
+console.log(plane1.startsWith('Airb'));
+console.log(plane1.endsWith('neo'));
+
+if (plane1.startsWith('Airbus') && plane1.endsWith('neo')) {
+  console.log('Part of the NEW Airbus family.')
+}
+
+// Practise exercise: check if the baggage of a passenger is allowed to be checked in, on the plane
+const checkBaggage = function (items) {
+  const baggage = items.toLowerCase();
+  if (baggage.includes('knife') || baggage.includes('gun')) {
+    console.log('You are not allowed on board.');
+  } else {
+    console.log('Welcome aboard!');
+  }
+}
+
+checkBaggage('I have a laptop, some Food and a pocket Knife');
+checkBaggage('Socks and a camera');
+checkBaggage('Got some snacks and a gun for protection');
+
+// Lecture: split() and join()
+console.log('a+very+nice+string'.split('+'));
+console.log('Jonas Schmedtmann'.split(' '));
+
+const [firstName, lastName] = 'Jonas Schmedtmann'.split(' ');
+
+// Make last name uper case and add a Mr. in the begining
+const newName = ['Mr.', firstName, lastName.toUpperCase()].join(' ');
+console.log(newName);
+
+// Write a function that capitalizes the first letter of name/names of a passenger
+const capitalizeName = function(name) {
+  const names = name.split(' ');
+  const namesUpper = [];
+  for (const n of names) {
+    namesUpper.push(n[0].toUpperCase() + n.slice(1));
+  }
+  console.log(namesUpper.join(' '));
+};
+capitalizeName('jessica ann smith davis');
+capitalizeName('jonas schmedtmann');
+capitalizeName('vaggelis manousakis');
+
+// Small Challenge: There is another way to capitalize a name
+const capitalizeName1 = function (name) {
+  const names = name.split(' ');
+  const namesUpper = [];
+  for (const n of names) {
+    namesUpper.push(n.replace(n[0], n[0].toUpperCase()));
+  }
+  console.log(namesUpper.join(' '));
+};
+capitalizeName1('jessica ann smith davis');
+
+// Padding a string
+const message = 'Go to gate 23!';
+console.log(message.padStart(25, '+').padEnd(30, '+'));
+console.log('Jonas'.padStart(25, '+').padEnd(30, '+'));
+
+// Implement a function that hides all digits but the last 4 of a credit card
+const maskCreditCard = function (number) {
+  const str = number + ''; // Converting a number to a string!!!
+  const last = str.slice(-4)
+  return last.padStart(str.length, '*');
+}
+
+console.log(maskCreditCard(12345678));
+console.log(maskCreditCard(1234567890123456));
+console.log(maskCreditCard('12345678901234561234123'));
+
+// Repeat()
+const message1 = 'Bas weather... All Departures Delayed... ';
+console.log(message1.repeat(5));
+
+const planesInLine = function (numberOfPlanes) {
+  console.log(`There are ${numberOfPlanes} planes in line ${'✈️'.repeat(numberOfPlanes)}`)
+}
+
+planesInLine(5);
+planesInLine(9);
+planesInLine(3);
