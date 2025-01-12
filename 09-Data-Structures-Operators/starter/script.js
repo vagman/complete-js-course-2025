@@ -480,7 +480,7 @@ console.log(passengerNameFixer('vaGGELiS'));
 const email = 'hello@jonas.io';
 const loginEmail = '   Hello@Jonas.Io \n';
 
-// const lowerEmail = loginEmail.toLocaleLowerCase();
+// const lowerEmail = loginEmail.toLowerCase();
 // const trimmedEmail = lowerEmail.trim();
 
 const normalizedEmail = loginEmail.toLowerCase().trim();
