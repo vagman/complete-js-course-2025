@@ -696,27 +696,23 @@ console.log(`The old title of book[1] was '${books[1].title}' and the new onw is
     The title may contain both small and capital letters.
 */
 function logBookTheme (title) {
-    const title = title.toLowerCase();
+    const bookTitle = title.toLowerCase();
 
-    if (title.startsWith('computer')) {
+    if (bookTitle.startsWith('computer')) {
         console.log('This book is about computers');
-    } else if (title.includes('algorithms') && title.includes('structures')) {
+    } else if (bookTitle.includes('algorithms') && bookTitle.includes('structures')) {
         console.log('This book is about algorithms and data structures');
-    } else if ((title.endsWith('system') || title.endsWith('systems')) && !title.includes('operating')) {
+    } else if ((bookTitle.endsWith('system') || bookTitle.endsWith('systems')) && !bookTitle.includes('operating')) {
         console.log('This book is about some systems, but definitely not about operating systems');
     }
 }
 logBookTheme(books[2].title);
-logBookTheme(books[5].title);
 
 console.log('----- Working with Strings - Part 3 ------');
 /*
     17.1 Below is the bookCategories variable that stores a string of categories.Each category is separated with a semicolon, for example, in a string "science;computing", 'science' and 'computing' are separate categories.
     Write a function called logBookCategories that takes a string of categories separated with semicolons, and logs each category to the console(as separate strings).
     Example
-    Code:
-        const bookCategories = 'science;computing;computer science;algorithms;business;operating systems;networking;electronics';
-        logBookCategories(bookCategories);
     Expected output:
         science
         computing
@@ -727,20 +723,34 @@ console.log('----- Working with Strings - Part 3 ------');
         networking
         electronics
 */
-
+const bookCategories = 'science;computing;computer science;algorithms;business;operating systems;networking;electronics';
+const logBookCategories = function  (categories) {
+    const cats = categories.split(';');
+    for (const cat of cats) {
+        console.log(cat);
+    }
+};
+logBookCategories(bookCategories);
 
 /*
     17.2 Now, the opposite.Each book from the books array has the keywords property. Write a function called getKeywordsAsString that takes the books array as an argument, collects keywords from each book, removes duplicates, and then joins them to create a single string where keywords are separated by a semicolon.
-    Example
-    Code:
-        getKeywordsAsString(books);
+    Example        
     Expected output:
         computer science; programming; algorithms;data structures; java; math; software; engineering; javascript;computer systems; C;operating systems; Java; mathematics; business; compilers; interpreters; work; focus;personal development
 */
+const getKeywordsAsString = function (books) {
+    let keywordsArr = [];
+    for (const book of books) {
+        keywordsArr.push(...book.keywords);
+    }
+    
+    return [...new Set(keywordsArr)].join(';');
+};
 
+console.log(getKeywordsAsString(books));
 
 /* 
-    17.3 Below is the bookChapters array that contains inner arrays.Each inner array consists of a chapter's title, and the number of a page, for example, in ['The Basics', 14], 'The Basics' is the chapter's title, and 14 is the number of a page.
+    17.3 Below is the bookChapters array that contains inner arrays. Each inner array consists of a chapter's title, and the number of a page, for example, in ['The Basics', 14], 'The Basics' is the chapter's title, and 14 is the number of a page.
     Write a function called logBookChapters that takes an array of arrays(like bookChapters) as an argument, and logs each chapter's name to the console together with the page number. The page number should be separated from the chapter's name with underscores(take a look at the example below).
     Use the padEnd method.
     Example
@@ -755,3 +765,26 @@ console.log('----- Working with Strings - Part 3 ------');
         Strings_____________ 706
 */
 
+const bookChapters = [
+    ['The Basics', 14],
+    ['Sorting', 254],
+    ['Searching', 372],
+    ['Graphs', 526],
+    ['Strings', 706]];
+
+/* My solution
+const logBookChapters = function (books) {
+    for (const [book, page] of books) {
+        const str = book.padEnd(book.length + (20 - book.length), '_').padEnd(book.length + (20 - book.length) + 1, ' ').padEnd(book.length + (20 - book.length)+ String(page).length + 1, page);
+        console.log(str);
+    }
+};
+*/
+
+// Suggested solution
+function logBookChapters(chapters) {
+    for (const [chapter, pages] of chapters) {
+      console.log(chapter.padEnd(20, '_') + ' ' + pages);
+    }
+}
+logBookChapters(bookChapters);
