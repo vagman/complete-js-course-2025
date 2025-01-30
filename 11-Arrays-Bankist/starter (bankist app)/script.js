@@ -60,8 +60,22 @@ const inputClosePin = document.querySelector('.form__input--pin');
 
 // Lecture 152: Creating DOM Elements
 const displayMovements = function (movements) {
-  movements.forEach(function(value, key, arr){
-    console.log(key, value);
+  // Empty the container from fixed, hard-coded HTML withdrawals/deposits
+  containerMovements.innerHTML = '';
+  // .textContent = 0;
+  movements.forEach(function(mov, i){
+    const type = mov > 0 ? 'deposit' : 'withdrawal';
+    // Template literal containing HTML
+    const html = `
+        <div class="movements__row">
+          <div class="movements__type movements__type--${type}">${i + 1} ${type}</div>
+          <div class="movements__date">3 days ago</div>
+          <div class="movements__value">${mov}€</div>
+        </div>`;
+        containerMovements.insertAdjacentHTML('afterbegin', html);
   });
 };
 displayMovements(account1.movements);
+
+
+
