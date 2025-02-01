@@ -1,5 +1,12 @@
 'use strict';
 
+const account1 = {
+  owner: 'Jonas Schmedtmann',
+  movements: [200, 450, -400, 3000, -650, -130, 70, 1300],
+  interestRate: 1.2, // %
+  pin: 1111,
+};
+
 // Lecture 152: Creating DOM Elements
 const displayMovements = function (movements) {
   movements.forEach(function(value, key, arr){
@@ -108,3 +115,29 @@ currenciesUnique.forEach(function(value, _value, map) {
 });
 // _variable : throw away variable, completely unecessary
 
+// Lecture 154: Data transformations: Map, Filter, Reduce (3 Array Methods) - see Udemy notes
+// Lecture 155: The map() Method
+// Task: take the movements[] array and convert it from Euros (let's say it is a repesentation to Euros right now) to USD.
+const eurToUSD = 1.1; // Convertion rate from Euros to USD
+
+const movementsUSD = movements.map(function(value) {
+   return value * eurToUSD;
+});
+
+console.log(movements);
+console.log(movementsUSD);
+
+const movementsUSDForLoop = [];
+for (const mov of movements) {
+  movementsUSDForLoop.push(mov * eurToUSD);
+}
+console.log(movementsUSDForLoop);
+
+const movementsUSDArrowFunction = movements.map(value => value * eurToUSD);
+console.log(movementsUSDArrowFunction);
+
+const movementsDescriptions = movements.map(
+  (mov, i) =>  
+    `Movement ${i + 1}: You ${mov > 0 ? 'deposited' : 'withdrew'} ${Math.abs(mov)}$.`
+);
+console.log(movementsDescriptions);
