@@ -141,3 +141,40 @@ const movementsDescriptions = movements.map(
     `Movement ${i + 1}: You ${mov > 0 ? 'deposited' : 'withdrew'} ${Math.abs(mov)}$.`
 );
 console.log(movementsDescriptions);
+
+// Lecture 157: Teh filter method
+const deposits = movements.filter(function(mov) {
+  return mov > 0;
+});
+console.log(movements);
+console.log(deposits);
+
+const depositsForLoop = [];
+for (const mov of movements) if (mov > 0) depositsForLoop.push(mov);
+console.log(depositsForLoop);
+
+// filter() method with arrow function implementation
+const withdrawals = movements.filter(mov => mov < 0);
+console.log(withdrawals);
+
+// For-of loop implementation
+const withdrawlsForLoop = [];
+for (const mov of movements) if (mov < 0) withdrawlsForLoop.push(mov);
+console.log(withdrawlsForLoop);
+
+// Lecture 158: reduce() method
+// acc is an accumulator that "snowballs" all the elements of the array
+// cur: is the current element of it's iteration of reduce method
+const balance = movements.reduce((acc, cur) => acc + cur, 0);
+// 0 is the initialization value of the accumulator arguement
+console.log(balance);
+
+// For-of implementation of the above
+let balance2 = 0;
+for (const mov of movements) balance2 += mov;
+console.log(balance2);
+
+// Get maximum value of movements array
+// Second arguement of reduce() is the initial value of movements[]. We set it as max and we compare it with the second value and so on...
+const max = movements.reduce((acc, mov) => (acc > mov) ? acc : mov, movements[0]);
+console.log(max);

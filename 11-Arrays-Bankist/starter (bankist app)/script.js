@@ -77,5 +77,24 @@ const displayMovements = function (movements) {
 };
 displayMovements(account1.movements);
 
+const calcDisplayBalance = function(movements) {
+  const balance = movements.reduce((acc, mov) => acc + mov, 0);
+  labelBalance.textContent = `${balance}€`;
+};
+calcDisplayBalance(account1.movements);
 
+// Lecture 156: Computing usernames for the app's users
+// username should be: stw
+const createUsernames = function(accs) {
+  accs.forEach(function(acc) {
+    acc.username = acc.owner
+    .toLowerCase()
+    .split(' ')
+    .map((name) => name[0])
+    .join('');
+  })
+};
+// We don't need to return anything because we are working on the array accounts[]. We aren't creating anything new here.
+createUsernames(accounts);
+console.log(accounts);
 
