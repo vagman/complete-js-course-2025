@@ -111,3 +111,19 @@ const createUsernames = function (accs) {
 createUsernames(accounts);
 console.log(accounts);
 
+// Lecture 162: The find() method
+console.log(accounts);
+
+const account = accounts.find(acc => acc.owner === 'Jessica Davis');
+// console.log(account);
+
+// Exercise: convert the above functionality to a for...of loop:
+const accountForOf = function(accounts) {
+  for (const acc of accounts) {
+    if (acc.owner === 'Jessica Davis') {
+      console.log('FOUND USER!!!!');
+      return acc;
+    }
+  }
+};
+// console.log(accountForOf(accounts));

@@ -192,3 +192,9 @@ const totalDepositsToUSD = movements
   .reduce((acc, mov) => acc + mov, 0);
 
 console.log(totalDepositsToUSD);
+
+// Lecture 162: The find Method
+// Returns the firsdt element which returns the below con dition True. find() also needs callback function which returns Boolean and find() return a single element.
+const firstWithdrawal = movements.find(mov => mov < 0);
+console.log(firstWithdrawal);
+
