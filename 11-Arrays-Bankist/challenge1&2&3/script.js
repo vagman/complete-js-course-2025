@@ -55,7 +55,7 @@ const calcAverageHumanAge = function (ages) {
      // 3. Calculate the average human age of all adult dogs (you should already know from other challenges how we calculate averages 😉)
   const adults = humanAges.filter(humanAge => humanAge > 18);
   console.log(`Only the adult dogs in human years: ${adults}`);
-  const averageAdult = adults.reduce((sum, currentAge) => sum += currentAge, 0) / adults.length;
+  const averageAdult = adults.reduce((sum, currentAge) => sum += currentAge / adults.length, 0);
   return averageAdult;
 };
 
@@ -63,5 +63,23 @@ const calcAverageHumanAge = function (ages) {
 console.log('Dog years: ', [5, 2, 4, 1, 15, 8, 3]);
 const avg1 = calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3]);
 const avg2 = calcAverageHumanAge([16, 6, 10, 5, 6, 1, 4]);
-
 console.log(avg1, avg2);
+
+console.log('-------- CHALLENGE #3 ---------');
+/* Coding Challenge #3
+Rewrite the 'calcAverageHumanAge' function from the previous challenge, but this time as an arrow function, and using chaining!
+TEST DATA 1: [5, 2, 4, 1, 15, 8, 3]
+TEST DATA 2: [16, 6, 10, 5, 6, 1, 4]
+GOOD LUCK 😀
+*/
+const calcAverageHumanAge1 = ages => 
+  ages
+  .map(age => (age <= 2 ? 2 * age : 16 + age * 4))
+  .filter(humanAge => humanAge > 18)
+  .reduce((acc, age, i, arr) => acc += age / arr.length, 0);
+
+
+console.log('Dog years: ', [5, 2, 4, 1, 15, 8, 3]);
+const avg11 = calcAverageHumanAge1([5, 2, 4, 1, 15, 8, 3]);
+const avg22 = calcAverageHumanAge1([16, 6, 10, 5, 6, 1, 4]);
+console.log(avg11, avg22);

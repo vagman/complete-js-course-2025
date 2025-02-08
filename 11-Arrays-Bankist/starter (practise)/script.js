@@ -178,3 +178,17 @@ console.log(balance2);
 // Second arguement of reduce() is the initial value of movements[]. We set it as max and we compare it with the second value and so on...
 const max = movements.reduce((acc, mov) => (acc > mov) ? acc : mov, movements[0]);
 console.log(max);
+
+// Lecture 160: The Magic of Chaining Methods
+// PIPELINE
+const eurToUSD1 = 1.1;
+const totalDepositsToUSD = movements
+  .filter(mov => mov > 0)
+  .map((mov, i, arr) => {
+    // console.log(arr);
+    return mov * eurToUSD1;
+  })
+  //.map(mov => mov * eurToUSD1)
+  .reduce((acc, mov) => acc + mov, 0);
+
+console.log(totalDepositsToUSD);
