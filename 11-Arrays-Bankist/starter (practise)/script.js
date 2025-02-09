@@ -9,7 +9,7 @@ const account1 = {
 
 // Lecture 152: Creating DOM Elements
 const displayMovements = function (movements) {
-  movements.forEach(function(value, key, arr){
+  movements.forEach(function (value, key, arr) {
     console.log(key, value);
   });
 };
@@ -24,11 +24,11 @@ for (const [i, movement] of movements.entries()) {
     console.log(`Movement ${i + 1}: You deposited ${movement}$.`);
   } else {
     console.log(`Movement ${i + 1}: You withdrew ${Math.abs(movement)}$.`);
-  } 
+  }
 }
 console.log('----- FOREACH ------');
 // Now implement the same with forEach()
-movements.forEach(function(mov, i, arr) {
+movements.forEach(function (mov, i, arr) {
   if (mov > 0) {
     console.log(`Movement ${i + 1}: You deposited ${mov}$.`);
   } else {
@@ -57,12 +57,11 @@ console.log([...arr]); // sallow copy #2
 // SPLICE
 // console.log(arr.splice(2)); // The original array has changes values !!!
 // Delete the last element of the array:
-console.log(`Original array: ${arr}`)
+console.log(`Original array: ${arr}`);
 arr.splice(-1);
 console.log(`Spliced last element: ${arr}`);
 arr.splice(1, 2);
 console.log(arr);
-
 
 // REVERSE
 arr = ['a', 'b', 'c', 'd', 'e'];
@@ -75,7 +74,7 @@ console.log('The original array has been mutated: ', arr2);
 const letters = arr.concat(arr2);
 console.log(letters);
 // 2nd way - without mutating any of the two arrays again:
-console.log(...arr, ...arr2)
+console.log(...arr, ...arr2);
 
 // JOIN
 console.log(letters.join('-'));
@@ -103,15 +102,15 @@ const currencies = new Map([
   ['GBP', 'Pound sterling'],
 ]);
 
-currencies.forEach(function(value, key, map) {
+currencies.forEach(function (value, key, map) {
   console.log(`${key}: ${value}`);
 });
 
 // Set - it doesn't have keys and indexes !!!
 const currenciesUnique = new Set(['USD', 'GBP', 'EUR', 'EUR']);
 console.log(currenciesUnique);
-currenciesUnique.forEach(function(value, _value, map) {
-  console.log(`${_value}: ${value}`)
+currenciesUnique.forEach(function (value, _value, map) {
+  console.log(`${_value}: ${value}`);
 });
 // _variable : throw away variable, completely unecessary
 
@@ -120,8 +119,8 @@ currenciesUnique.forEach(function(value, _value, map) {
 // Task: take the movements[] array and convert it from Euros (let's say it is a repesentation to Euros right now) to USD.
 const eurToUSD = 1.1; // Convertion rate from Euros to USD
 
-const movementsUSD = movements.map(function(value) {
-   return value * eurToUSD;
+const movementsUSD = movements.map(function (value) {
+  return value * eurToUSD;
 });
 
 console.log(movements);
@@ -137,13 +136,15 @@ const movementsUSDArrowFunction = movements.map(value => value * eurToUSD);
 console.log(movementsUSDArrowFunction);
 
 const movementsDescriptions = movements.map(
-  (mov, i) =>  
-    `Movement ${i + 1}: You ${mov > 0 ? 'deposited' : 'withdrew'} ${Math.abs(mov)}$.`
+  (mov, i) =>
+    `Movement ${i + 1}: You ${mov > 0 ? 'deposited' : 'withdrew'} ${Math.abs(
+      mov
+    )}$.`
 );
 console.log(movementsDescriptions);
 
 // Lecture 157: Teh filter method
-const deposits = movements.filter(function(mov) {
+const deposits = movements.filter(function (mov) {
   return mov > 0;
 });
 console.log(movements);
@@ -176,7 +177,10 @@ console.log(balance2);
 
 // Get maximum value of movements array
 // Second arguement of reduce() is the initial value of movements[]. We set it as max and we compare it with the second value and so on...
-const max = movements.reduce((acc, mov) => (acc > mov) ? acc : mov, movements[0]);
+const max = movements.reduce(
+  (acc, mov) => (acc > mov ? acc : mov),
+  movements[0]
+);
 console.log(max);
 
 // Lecture 160: The Magic of Chaining Methods
@@ -198,3 +202,20 @@ console.log(totalDepositsToUSD);
 const firstWithdrawal = movements.find(mov => mov < 0);
 console.log(firstWithdrawal);
 
+// Lecture 166: The New findLast and findLastIndex Methods
+console.log(movements);
+// Starting form the beginning..
+const lastWithdrawal = movements.findLast(mov => mov < 0);
+console.log(lastWithdrawal);
+
+// Challenge: Use the findLast() to print 'Your latest large movement was X movements ago'. Large is >= 2000$.
+
+const latestLargeMovementIndex = movements.findLastIndex(
+  mov => Math.abs(mov) > 1000
+);
+console.log(latestLargeMovementIndex);
+console.log(
+  `Your latest large movement was ${
+    movements.length - latestLargeMovementIndex
+  } movements ago.`
+);
