@@ -76,11 +76,10 @@ const displayMovements = function (movements) {
   });
 };
 
-const calcDisplayBalance = function (movements) {
-  const balance = movements.reduce((acc, mov) => acc + mov, 0);
-  labelBalance.textContent = `${balance}€`;
+const calcDisplayBalance = function (acc) {
+  acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
+  labelBalance.textContent = `${acc.balance}€`;
 };
-
 
 // Lecture 160: The magic of chaining methods
 const calcDisplaySummary = function (acc) {
@@ -118,11 +117,17 @@ const createUsernames = function (accs) {
 };
 // We don't need to return anything because we are working on the array accounts[]. We aren't creating anything new here.
 createUsernames(accounts);
-console.log(accounts);
+
+const updateUI = function (acc) {
+  // Display movements
+  displayMovements(acc.movements);
+  // Dispaly balance 
+  calcDisplayBalance(acc);
+  // Display summary
+  calcDisplaySummary(acc);
+};
 
 // Lecture 162: The find() method
-console.log(accounts);
-
 const account = accounts.find(acc => acc.owner === 'Jessica Davis');
 // console.log(account);
 
@@ -136,7 +141,6 @@ const accountForOf = function(accounts) {
 };
 // console.log(accountForOf(accounts));
 // Lecture 163: Implemeting Login
-
 // Event Handlers
 let currentAccount;
 btnLogin.addEventListener('click', function (e) {
@@ -150,12 +154,24 @@ btnLogin.addEventListener('click', function (e) {
     // Clear login input fields
     inputLoginUsername.value = inputLoginPin.value = '';
     // Remove focus on PIN element: inputLoginPin.blur(); (non needed in Chrome)
-    // Display movements
-    displayMovements(currentAccount.movements);
-    // Dispaly balance 
-    calcDisplayBalance(currentAccount.movements);
-    // Display summary
-    calcDisplaySummary(currentAccount);
-    
+    updateUI(currentAccount);
+  }
+});
+
+btnTransfer.addEventListener('click', function(e) {
+  e.preventDefault();
+  const amount = Number(inputTransferAmount.value);
+  const receiverAcc = accounts.find(acc => acc.username === inputTransferTo.value);
+  inputTransferTo.value = inputTransferAmount.value = '';
+  if (amount > 0 &&
+      amount <= currentAccount.balance &&
+      receiverAcc?.username !== currentAccount.username &&
+      receiverAcc) {
+    // Doing the transfer
+    currentAccount.movements.push(-amount);
+    receiverAcc.movements.push(amount);
+
+    // Update UI
+    updateUI(currentAccount);
   }
 });
