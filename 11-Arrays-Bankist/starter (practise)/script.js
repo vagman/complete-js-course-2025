@@ -7,6 +7,29 @@ const account1 = {
   pin: 1111,
 };
 
+const account2 = {
+  owner: 'Jessica Davis',
+  movements: [5000, 3400, -150, -790, -3210, -1000, 8500, -30],
+  interestRate: 1.5,
+  pin: 2222,
+};
+
+const account3 = {
+  owner: 'Steven Thomas Williams',
+  movements: [200, -200, 340, -300, -20, 50, 400, -460],
+  interestRate: 0.7,
+  pin: 3333,
+};
+
+const account4 = {
+  owner: 'Sarah Smith',
+  movements: [430, 1000, 700, 50, 90],
+  interestRate: 1,
+  pin: 4444,
+};
+
+const accounts = [account1, account2, account3, account4];
+
 // Lecture 152: Creating DOM Elements
 const displayMovements = function (movements) {
   movements.forEach(function (value, key, arr) {
@@ -219,3 +242,68 @@ console.log(
     movements.length - latestLargeMovementIndex
   } movements ago.`
 );
+
+// Lecture 167: some and every
+// EQUALITY
+console.log(movements);
+console.log(
+  'Is there a movement with value -130 in movements array ?',
+  movements.includes(-130)
+);
+
+// CONDITION
+const anyDeposits = movements.some(mov => mov === -130);
+console.log(
+  'Are there any deposits in the movements array with value -130 ?',
+  anyDeposits
+);
+
+const anyDeposits1 = movements.some(mov => mov > 0);
+console.log(anyDeposits1);
+
+// EVERY
+console.log('------- EVERY() ------');
+const everyDeposit = account4.movements.every(mov => mov > 0);
+console.log(
+  'Are all movements on account4 positive ? (No withdrawals)',
+  everyDeposit
+);
+
+// Separate callback
+const deposit = mov => mov > 0;
+console.log(movements.every(deposit));
+console.log(movements.some(deposit));
+console.log(movements.filter(deposit));
+
+// Lecture 168: flat() and flatmap()
+console.log('----- Flat() and flatMap() -----');
+const arr3 = [[1, 2, 3], [4, 5, 6], 7, 8];
+console.log(arr3.flat());
+
+const arrDeep = [[[1, 2], 3], [4, [5, 6]], 7, 8];
+// 2 level deep falt()
+console.log(arrDeep.flat(2));
+
+// Calculate the overall balance of all the movements
+// const accountmovements = accounts.map(acc => acc.movements);
+// console.log('All movements: ', accountmovements);
+// const allMovements = accountmovements.flat();
+// console.log(allMovements);
+// const sumOfAllMovements = allMovements.reduce((acc, mov) => acc + mov, 0);
+// console.log(
+//   'The sum of all the movements from all the bank accounts is: ',
+//   sumOfAllMovements
+// );
+
+// Instead of doing all this work seperately, we can do this..
+const overallBalance = accounts
+  .map(acc => acc.movements)
+  .flat()
+  .reduce((acc, mov) => acc + mov, 0);
+console.log('flat(): ', overallBalance);
+
+// flatMap() - It goes only one level deep
+const overallBalance2 = accounts
+  .flatMap(acc => acc.movements)
+  .reduce((acc, mov) => acc + mov, 0);
+console.log('flatMap(): ', overallBalance);
