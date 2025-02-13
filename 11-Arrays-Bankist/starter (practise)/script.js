@@ -307,3 +307,22 @@ const overallBalance2 = accounts
   .flatMap(acc => acc.movements)
   .reduce((acc, mov) => acc + mov, 0);
 console.log('flatMap(): ', overallBalance);
+
+// Lecture 170: Sorting Arrays
+// Strings
+const owners = ['Jonas', 'Zach', 'Adam', 'Martha'];
+console.log(owners.sort());
+
+// Numbers
+console.log(movements);
+
+// return < 0, A, B
+// return > 0, B, A
+
+// Ascending
+movements.sort((a, b) => a - b);
+
+// Descending
+movements.sort((a, b) => b - a);
+console.log(movements);
+// Be careful with sort(), it mutates the original array

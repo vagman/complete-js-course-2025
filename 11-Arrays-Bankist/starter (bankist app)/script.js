@@ -59,11 +59,13 @@ const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
 // Lecture 152: Creating DOM Elements
-const displayMovements = function (movements) {
+const displayMovements = function (movements, sort = false) {
   // Empty the container from fixed, hard-coded HTML withdrawals/deposits
   containerMovements.innerHTML = '';
   // .textContent = 0;
-  movements.forEach(function (mov, i) {
+  // Lecture 170: Sorting Arrays
+  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+  movs.forEach(function (mov, i) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
     // Template literal containing HTML
     const html = `
@@ -218,4 +220,11 @@ btnClose.addEventListener('click', function (e) {
     // Hide UI
     containerApp.style.opacity = 0;
   }
+});
+
+let sorted = false;
+btnSort.addEventListener('click', function (e) {
+  e.preventDefault();
+  displayMovements(currentAccount.movements, !sorted);
+  sorted = !sorted;
 });
