@@ -221,7 +221,7 @@ const totalDepositsToUSD = movements
 console.log(totalDepositsToUSD);
 
 // Lecture 162: The find Method
-// Returns the firsdt element which returns the below con dition True. find() also needs callback function which returns Boolean and find() return a single element.
+// Returns the first element which returns the below condition True. find() also needs callback function which returns Boolean and find() return a single element.
 const firstWithdrawal = movements.find(mov => mov < 0);
 console.log(firstWithdrawal);
 
@@ -326,3 +326,11 @@ movements.sort((a, b) => a - b);
 movements.sort((a, b) => b - a);
 console.log(movements);
 // Be careful with sort(), it mutates the original array
+
+// Lecture 171: Array Grouping
+console.log('---- Lecture 171: Array Groupping ----');
+console.log(movements);
+const groupedMovements = Object.groupBy(movements, movement =>
+  movement > 0 ? 'deposits' : 'withdrawals'
+);
+console.log(groupedMovements);

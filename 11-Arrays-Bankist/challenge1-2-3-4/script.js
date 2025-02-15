@@ -165,7 +165,7 @@ console.log(swimmingAdjacent);
 
 // 6. Do all the breeds have an average weight of 10kg or more? Log to the console whether "true" or "false".
 const isAverageDogWeight10KgOrMore =
-  10 > breeds.reduce((acc, dog) => acc + dog.averageWeight, 0) / breeds.length;
+  10 > breeds.every(breed => breed.averageWeight > 10);
 console.log(
   'Is the average dog weight 10kg or more ?',
   isAverageDogWeight10KgOrMore
@@ -179,3 +179,12 @@ console.log(
 );
 
 // BONUS: What's the average weight of the heaviest breed that likes to fetch? HINT: Use the "Math.max" method along with the ... operator.
+const fetchWeights = breeds
+  .filter(breed => breed.activities.includes('fetch'))
+  .map(breed => breed.averageWeight);
+const heaviestFetchBreed = Math.max(...fetchWeights);
+
+console.log(fetchWeights);
+console.log(
+  `The average weight of the heaviest breed is: ${heaviestFetchBreed}kg`
+);
