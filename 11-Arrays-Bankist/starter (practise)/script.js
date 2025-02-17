@@ -334,3 +334,42 @@ const groupedMovements = Object.groupBy(movements, movement =>
   movement > 0 ? 'deposits' : 'withdrawals'
 );
 console.log(groupedMovements);
+
+const groupedByActivity = Object.groupBy(accounts, account => {
+  console.log('TEST');
+  const movementCount = account.movements.length;
+  if (movementCount >= 8) return 'very active';
+  if (movementCount >= 4) return 'active';
+  if (movementCount >= 1) return 'moderate';
+  return 'inactive';
+});
+
+console.log(groupedByActivity);
+
+// Lecture 172: More Ways of Creating and Filling Arrays
+const arr4 = [1, 2, 3, 4, 5, 6, 7];
+console.log(new Array(1, 2, 3, 4, 5, 6, 7));
+
+// Create an Array(n) with n number of emprty slots
+const x = new Array(7);
+console.log(x);
+console.log(x.map(() => 5));
+
+// Be careful: we overwrite the original array with fill() method
+x.fill(1, 3, 5);
+console.log(x);
+
+console.log(arr4.fill(23, 2, 6));
+// Array.from() method called directly from the Array object
+const y = Array.from({ length: 7 }, () => 1);
+console.log(y);
+// Use underscore to let others know you don't use this parameter
+const z = Array.from({ length: 7 }, (_, currentIndex) => currentIndex + 1);
+console.log(z);
+
+// Create an Array that has stored in it 100 random dice rolls
+const dice100 = Array.from(
+  { length: 100 },
+  () => Math.floor(Math.random() * 6) + 1
+);
+console.log(dice100);
