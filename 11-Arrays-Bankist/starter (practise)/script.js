@@ -373,3 +373,75 @@ const dice100 = Array.from(
   () => Math.floor(Math.random() * 6) + 1
 );
 console.log(dice100);
+
+// Lecture 173: Non-Destructive Alternatives: toReversed, toSorted, toSpliced, with
+console.log(movements);
+const reversedMov = movements.toReversed();
+console.log(reversedMov);
+console.log(movements);
+
+// toSorted (sort), toSpliced(splice) work exactly the same as the originals but the diffrence is that they do not work on the original array but a copy of it
+
+// movements[1] = 2000;
+const newMovements = movements.with(1, 2000);
+console.log(newMovements);
+console.log(movements);
+
+// Lecture 175: Array Methods Practise
+// Q1: Calculate how much has been deposited in total in the bank
+const bankDepositSum = accounts
+  .flatMap(acc => acc.movements)
+  .filter(mov => mov > 0)
+  .reduce((deposit, acc) => acc + deposit, 0);
+console.log(`The sum of all deposits in the bank is: ${bankDepositSum} EUR`);
+// Q1 How many deposits have been made in the bank with at least 1000$ ?
+// First solution
+const numDeposits1000 = accounts
+  .flatMap(acc => acc.movements)
+  .filter(mov => mov >= 1000).length;
+console.log(`There are ${numDeposits1000} deposits with at least 1000 USD.`);
+
+// Second solution
+const numDeposits1000vol2 = accounts
+  .flatMap(acc => acc.movements)
+  .reduce((count, currentEl) => (currentEl >= 1000 ? ++count : count), 0);
+console.log(
+  `There are ${numDeposits1000vol2} deposits with at least 1000 USD.`
+);
+
+// Prefix ++ operator
+let a = 10;
+console.log(a++);
+console.log(a);
+
+// Q3 Calculate the sum of all tjhe deposits and withdrawals
+const { deposits1, withdrawals1 } = accounts
+  .flatMap(acc => acc.movements)
+  .reduce(
+    (sums, current) => {
+      // There is so code duplication in the code below
+      // current >= 0 ? (sums.deposits += current) : (sums.withdrawals += current)
+      // Better solution:
+      sums[current > 0 ? 'deposits1' : 'withdrawals1'] += current;
+      return sums;
+    },
+    { deposits1: 0, withdrawals1: 0 }
+  );
+
+console.log(deposits1, withdrawals1);
+
+// Q4 Title case e.g. this is a nice title --> This Is a Nice Title
+const convertToTitleCase = function (title) {
+  const capitalize = str => str[0].toUpperCase() + str.slice(1);
+  const exceptions = ['a', 'an', 'and', 'the', 'but', 'on', 'or', 'in', 'with'];
+  const titleCase = title
+    .toLowerCase()
+    .split(' ')
+    .map(word => (exceptions.includes(word) ? word : capitalize(word)))
+    .join(' ');
+  return capitalize(titleCase);
+};
+
+console.log(convertToTitleCase('this is a nice title'));
+console.log(convertToTitleCase('this is a LONG title but not too long'));
+console.log(convertToTitleCase('and here is another title with an EXAMPLE'));
