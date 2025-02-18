@@ -881,7 +881,6 @@ console.log(dogs.some(dog => dog.curFood === dog.recFood));
 // 6.
 const checkEatingOkay = dog =>
   dog.curFood < dog.recFood * 1.1 && dog.curFood > dog.recFood * 0.9;
-
 console.log(dogs.every(checkEatingOkay));
 
 // 7.

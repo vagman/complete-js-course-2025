@@ -336,7 +336,6 @@ const groupedMovements = Object.groupBy(movements, movement =>
 console.log(groupedMovements);
 
 const groupedByActivity = Object.groupBy(accounts, account => {
-  console.log('TEST');
   const movementCount = account.movements.length;
   if (movementCount >= 8) return 'very active';
   if (movementCount >= 4) return 'active';
