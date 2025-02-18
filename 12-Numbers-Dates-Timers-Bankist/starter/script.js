@@ -260,7 +260,7 @@ labelBalance.addEventListener('click', function () {
     element => +element.textContent.replace('€', '')
   );
   console.log(movementsUI);
-  movementsUI2 = [...document.querySelectorAll('.movements__value')];
+  // movementsUI2 = [...document.querySelectorAll('.movements__value')];
   // Here mapping has to be done seperatly so Array.from() is cleaner
 });
 
@@ -345,3 +345,64 @@ console.log((2.7).toFixed(0)); // returns String !!!
 console.log((2.7).toFixed(3));
 console.log((2.345).toFixed(2));
 console.log(+(2.345).toFixed(2)); // Convert it back to Number
+
+// Lecture 181: Remainder Operator
+console.log(5 % 2);
+console.log(5 / 2); // 5 = 2 * 2 + 1
+
+console.log(8 % 3);
+console.log(8 / 3); // 8 = 2 * 3 + 2
+
+// Check if a number is even or odd
+console.log(7 % 2); // even number
+console.log(7 / 2);
+
+const isEven = number => number % 2 === 0;
+
+console.log(isEven(8)); // true
+console.log(isEven(23)); // false
+console.log(isEven(514)); // true
+
+labelBalance.addEventListener('click', function () {
+  [...document.querySelectorAll('.movements__row')].forEach(function (row, i) {
+    // 0, 2, 4, 6
+    if (i % 2 === 0) row.style.backgroundColor = 'orangered';
+    // 0, 3, 6, 9
+    if (i % 3 === 0) row.style.backgroundColor = 'blue';
+  });
+});
+
+// Lecture 183: Working with BigInt
+console.log(2 ** 53 - 1);
+console.log(Number.MAX_SAFE_INTEGER);
+console.log(2 ** 53 + 1);
+console.log(2 ** 53 + 2);
+console.log(2 ** 53 - 3);
+console.log(2 ** 53 - 4);
+
+// ES2020 BigInt introduced
+console.log(4239091293949123094900123444123n);
+console.log(BigInt(423909129));
+
+// Operations
+console.log(10000n + 10000n);
+console.log(541982349777129838949841289318939812498n * 1000000n);
+// console.log(Math.sqrt(16n)); // ERROR
+
+const huge = 54198234977712983894912893981n;
+const num = 23;
+console.log(huge * BigInt(num));
+
+console.log(20n > 15); // true
+console.log(20n === 20); // false
+
+console.log(typeof 20n); // bigint
+console.log(20n == '20'); // true
+
+console.log(huge + 'is REALLY big !!!');
+
+// Divisions
+console.log(11n / 3n); // 3n
+console.log(10 / 3); // 3.3333333333333335
+
+// Lecture 184: Creating Dates
