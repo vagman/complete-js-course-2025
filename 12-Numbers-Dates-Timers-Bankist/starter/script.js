@@ -79,21 +79,28 @@ const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
 // Lecture 152: Creating DOM Elements
-const displayMovements = function (movements, sort = false) {
+const displayMovements = function (acc, sort = true) {
   // Empty the container from fixed, hard-coded HTML withdrawals/deposits
   containerMovements.innerHTML = '';
   // .textContent = 0;
   // Lecture 170: Sorting Arrays
-  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+  const movs = sort
+    ? acc.movements.slice().sort((a, b) => a - b)
+    : acc.movements;
   movs.forEach(function (mov, i) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
+    const date = new Date(acc.movementsDates[i]);
+    const day = `${date.getDate()}`.padStart(2, 0);
+    const month = `${date.getMonth() + 1}`.padStart(2, 0); // zero based !!!
+    const year = date.getFullYear();
+    const dsiplayDate = `${day}/${month}/${year}`;
     // Template literal containing HTML
     const html = `
         <div class="movements__row">
           <div class="movements__type movements__type--${type}">${
       i + 1
     } ${type}</div>
-          <div class="movements__date">3 days ago</div>
+          <div class="movements__date">${dsiplayDate}</div>
           <div class="movements__value">${mov.toFixed(2)}€</div>
         </div>`;
     containerMovements.insertAdjacentHTML('afterbegin', html);
@@ -143,7 +150,7 @@ createUsernames(accounts);
 
 const updateUI = function (acc) {
   // Display movements
-  displayMovements(acc.movements);
+  displayMovements(acc);
   // Dispaly balance
   calcDisplayBalance(acc);
   // Display summary
@@ -166,6 +173,23 @@ const accountForOf = function (accounts) {
 // Lecture 163: Implemeting Login
 // Event Handlers
 let currentAccount;
+
+// FAKE ALWAYS LOGGED IN
+currentAccount = account1;
+updateUI(currentAccount);
+containerApp.style.opacity = 100;
+
+const now = new Date();
+// labelDate.textContent = now;
+
+// the format we want is: dd/mm/YYYY
+const day = `${now.getDate()}`.padStart(2, 0);
+const month = `${now.getMonth() + 1}`.padStart(2, 0); // zero based !!!
+const year = now.getFullYear();
+const hour = now.getHours();
+const min = now.getMinutes();
+labelDate.textContent = `${day}/${month}/${year}, ${hour}:${min}`;
+
 btnLogin.addEventListener('click', function (e) {
   // Prevent form from submiting, using and event arguement
   e.preventDefault();
@@ -406,3 +430,42 @@ console.log(11n / 3n); // 3n
 console.log(10 / 3); // 3.3333333333333335
 
 // Lecture 184: Creating Dates
+// Create a date
+/*
+const now = new Date();
+console.log(now);
+
+console.log(new Date('Tue Feb 18 2025 16:21:38'));
+console.log(new Date('December 24, 2015'));
+
+console.log(new Date(account1.movementsDates[0]));
+console.log(new Date(2037, 10, 19, 15, 23, 5));
+console.log(new Date(2037, 10, 33, 15, 23, 5));
+
+console.log(new Date(0));
+// 3 days after the date above is: 3 * 24 hours * 60 mins * 60 seconds * 1000 miliseconds - timestamp of day No.3
+console.log(new Date(3 * 24 * 60 * 60 * 1000));
+*/
+
+// Working with dates
+const future = new Date(2037, 10, 19, 15, 23);
+console.log(future);
+
+console.log(future.getFullYear());
+console.log(future.getMonth()); // 0 based
+console.log(future.getDate()); // Get date
+console.log(future.getDay()); // day of the week, 4: Thursday
+console.log(future.getHours());
+console.log(future.getMinutes());
+console.log(future.getSeconds());
+
+// International standard string
+console.log(future.toISOString());
+console.log(future.getTime());
+
+console.log(new Date(2142249780000));
+
+console.log(Date.now());
+
+future.setFullYear(2040);
+console.log(future);
