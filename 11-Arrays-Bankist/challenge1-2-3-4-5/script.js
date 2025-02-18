@@ -281,9 +281,10 @@ const groupDogsByFood = Object.groupBy(dogs, dog => {
 console.log(groupDogsByFood);
 
 // 9. Group the dogs by the number of owners they have
-const groupDogsByOwnersNumber = Object.groupBy(dogs, dog => {
-  return dog.owners.length;
-});
+const groupDogsByOwnersNumber = Object.groupBy(
+  dogs,
+  dog => `${dog.owners.length}-owners`
+);
 console.log('Dogs grouped by number of owners: ', groupDogsByOwnersNumber);
 
 // 10. Sort the dogs array by recommended food portion in an ascending order. Make sure to NOT mutate the original array!
