@@ -78,57 +78,78 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
-/////////////////////////////////////////////////
-// Functions
+const formatMovementDate = function (date) {
+  const calcDaysPassed = (date1, date2) =>
+    Math.round(Math.abs(date2 - date1) / (1000 * 60 * 60 * 24));
+  const daysPassed = calcDaysPassed(new Date(), date);
+  console.log(daysPassed);
+  const day = `${date.getDate()}`.padStart(2, 0);
+  const month = `${date.getMonth() + 1}`.padStart(2, 0); // zero based !!!
+  const year = date.getFullYear();
+  return `${day}/${month}${year}`;
+};
 
-const displayMovements = function (movements, sort = false) {
+// Lecture 152: Creating DOM Elements
+const displayMovements = function (acc, sort = false) {
+  // Empty the container from fixed, hard-coded HTML withdrawals/deposits
   containerMovements.innerHTML = '';
+  // Lecture 186: Fixing Sorting Bug
+  const combinedMovsDates = acc.movements.map((mov, i) => ({
+    movement: mov,
+    movementDate: acc.movementsDates.at(i),
+  }));
+  console.log(combinedMovsDates);
 
-  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+  if (sort) combinedMovsDates.sort((a, b) => a.movement - b.movement);
 
-  movs.forEach(function (mov, i) {
-    const type = mov > 0 ? 'deposit' : 'withdrawal';
+  combinedMovsDates.forEach(function (obj, i) {
+    const { movement, movementDate } = obj;
+    const date = new Date(acc.movementsDates[i]);
+    const displayDate = formatMovementDate(date);
+    const type = movement > 0 ? 'deposit' : 'withdrawal';
 
+    // Template literal containing HTML
     const html = `
-      <div class="movements__row">
-        <div class="movements__type movements__type--${type}">${
+        <div class="movements__row">
+          <div class="movements__type movements__type--${type}">${
       i + 1
     } ${type}</div>
-        <div class="movements__value">${mov}€</div>
-      </div>
-    `;
-
+          <div class="movements__date">${displayDate}</div>
+          <div class="movements__value">${movement.toFixed(2)}€</div>
+        </div>`;
     containerMovements.insertAdjacentHTML('afterbegin', html);
   });
 };
 
 const calcDisplayBalance = function (acc) {
   acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
-  labelBalance.textContent = `${acc.balance}€`;
+  labelBalance.textContent = `${acc.balance.toFixed(2)}€`;
 };
 
+// Lecture 160: The magic of chaining methods
 const calcDisplaySummary = function (acc) {
   const incomes = acc.movements
     .filter(mov => mov > 0)
     .reduce((acc, mov) => acc + mov, 0);
-  labelSumIn.textContent = `${incomes}€`;
+  labelSumIn.textContent = `${incomes.toFixed(2)}€`;
 
   const out = acc.movements
     .filter(mov => mov < 0)
     .reduce((acc, mov) => acc + mov, 0);
-  labelSumOut.textContent = `${Math.abs(out)}€`;
+  labelSumOut.textContent = `${Math.abs(out).toFixed(2)}€`;
 
   const interest = acc.movements
     .filter(mov => mov > 0)
     .map(deposit => (deposit * acc.interestRate) / 100)
     .filter((int, i, arr) => {
-      // console.log(arr);
       return int >= 1;
     })
     .reduce((acc, int) => acc + int, 0);
-  labelSumInterest.textContent = `${interest}€`;
+  labelSumInterest.textContent = `${interest.toFixed(2)}€`;
 };
 
+// Lecture 156: Computing usernames for the app's users
+// username should be: stw
 const createUsernames = function (accs) {
   accs.forEach(function (acc) {
     acc.username = acc.owner
@@ -138,79 +159,106 @@ const createUsernames = function (accs) {
       .join('');
   });
 };
+// We don't need to return anything because we are working on the array accounts[]. We aren't creating anything new here.
 createUsernames(accounts);
 
 const updateUI = function (acc) {
   // Display movements
-  displayMovements(acc.movements);
-
-  // Display balance
+  displayMovements(acc);
+  // Dispaly balance
   calcDisplayBalance(acc);
-
   // Display summary
   calcDisplaySummary(acc);
 };
 
-///////////////////////////////////////
-// Event handlers
+// Lecture 162: The find() method
+const account = accounts.find(acc => acc.owner === 'Jessica Davis');
+// console.log(account);
+
+// Exercise: convert the above functionality to a for...of loop:
+const accountForOf = function (accounts) {
+  for (const acc of accounts) {
+    if (acc.owner === 'Jessica Davis') {
+      return acc;
+    }
+  }
+};
+// console.log(accountForOf(accounts));
+// Lecture 163: Implemeting Login
+// Event Handlers
 let currentAccount;
 
-btnLogin.addEventListener('click', function (e) {
-  // Prevent form from submitting
-  e.preventDefault();
+// FAKE ALWAYS LOGGED IN
+// currentAccount = account1;
+// updateUI(currentAccount);
+// containerApp.style.opacity = 100;
 
+btnLogin.addEventListener('click', function (e) {
+  // Prevent form from submiting, using and event arguement
+  e.preventDefault();
   currentAccount = accounts.find(
     acc => acc.username === inputLoginUsername.value
   );
-  console.log(currentAccount);
-
-  if (currentAccount?.pin === Number(inputLoginPin.value)) {
-    // Display UI and message
-    labelWelcome.textContent = `Welcome back, ${
+  if (currentAccount?.pin === +inputLoginPin.value) {
+    // Display UI and a welcome message
+    labelWelcome.textContent = `Welcome back ${
       currentAccount.owner.split(' ')[0]
     }`;
     containerApp.style.opacity = 100;
 
-    // Clear input fields
+    // Create current date and time
+    const now = new Date();
+    // the format we want is: dd/mm/YYYY
+    const day = `${now.getDate()}`.padStart(2, 0);
+    const month = `${now.getMonth() + 1}`.padStart(2, 0); // zero based !!!
+    const year = now.getFullYear();
+    const hour = `${now.getHours()}`.padStart(2, 0);
+    const min = `${now.getMinutes()}`.padStart(2, 0);
+    labelDate.textContent = `${day}/${month}/${year}, ${hour}:${min}`;
+    // Clear login input fields
     inputLoginUsername.value = inputLoginPin.value = '';
-    inputLoginPin.blur();
-
-    // Update UI
+    // Remove focus on PIN element: inputLoginPin.blur(); (non needed in Chrome)
     updateUI(currentAccount);
   }
 });
 
 btnTransfer.addEventListener('click', function (e) {
   e.preventDefault();
-  const amount = Number(inputTransferAmount.value);
+  const amount = +inputTransferAmount.value;
   const receiverAcc = accounts.find(
     acc => acc.username === inputTransferTo.value
   );
-  inputTransferAmount.value = inputTransferTo.value = '';
-
+  inputTransferTo.value = inputTransferAmount.value = '';
   if (
     amount > 0 &&
-    receiverAcc &&
-    currentAccount.balance >= amount &&
-    receiverAcc?.username !== currentAccount.username
+    amount <= currentAccount.balance &&
+    receiverAcc?.username !== currentAccount.username &&
+    receiverAcc
   ) {
     // Doing the transfer
     currentAccount.movements.push(-amount);
     receiverAcc.movements.push(amount);
+
+    // Add transfer date
+    currentAccount.movementsDates.push(new Date().toISOString());
+    receiverAcc.movementsDates.push(new Date().toISOString());
 
     // Update UI
     updateUI(currentAccount);
   }
 });
 
+// Only grant a loan if there is a deposit with atleast 10% of the requested loan amount
 btnLoan.addEventListener('click', function (e) {
   e.preventDefault();
-
-  const amount = Number(inputLoanAmount.value);
-
-  if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
+  const amount = Math.floor(inputLoanAmount.value);
+  if (amount > 0 && currentAccount.movements.some(mov => mov >= 0.1 * amount)) {
     // Add movement
     currentAccount.movements.push(amount);
+    console.log(currentAccount.movements);
+
+    // Add loan date
+    currentAccount.movementsDates.push(new Date().toISOString());
 
     // Update UI
     updateUI(currentAccount);
@@ -218,36 +266,240 @@ btnLoan.addEventListener('click', function (e) {
   inputLoanAmount.value = '';
 });
 
+// Lecture 165: The findIndex() Method - Close account functionality
 btnClose.addEventListener('click', function (e) {
   e.preventDefault();
-
   if (
-    inputCloseUsername.value === currentAccount.username &&
-    Number(inputClosePin.value) === currentAccount.pin
+    currentAccount.username === inputCloseUsername.value &&
+    currentAccount.pin === +inputClosePin.value
   ) {
     const index = accounts.findIndex(
       acc => acc.username === currentAccount.username
     );
-    console.log(index);
-    // .indexOf(23)
-
-    // Delete account
+    // Delete account: Splice works on the array itself and doesn't create a new one
     accounts.splice(index, 1);
+
+    // Clear fields
+    inputCloseUsername.value = inputClosePin.value = '';
 
     // Hide UI
     containerApp.style.opacity = 0;
   }
-
-  inputCloseUsername.value = inputClosePin.value = '';
 });
 
 let sorted = false;
 btnSort.addEventListener('click', function (e) {
   e.preventDefault();
-  displayMovements(currentAccount.movements, !sorted);
+  displayMovements(currentAccount, !sorted);
   sorted = !sorted;
+});
+
+// Lecture 171: Array Grouping
+const groupedAccounts = Object.groupBy(accounts, ({ type }) => type);
+console.log(groupedAccounts);
+
+// Let's assume we do not have the movements stores in an array. They are only displayed in the UI.
+labelBalance.addEventListener('click', function () {
+  const movementsUI = Array.from(
+    document.querySelectorAll('.movements__value'),
+    element => +element.textContent.replace('€', '')
+  );
+  console.log(movementsUI);
+  // movementsUI2 = [...document.querySelectorAll('.movements__value')];
+  // Here mapping has to be done seperatly so Array.from() is cleaner
 });
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
+// Lecture 179: Converting and Checking Numbers
+console.log(23 === 23.0); // true
+
+// Decimal (base 10): 0-9
+// Binary (base 2): 0-1
+console.log(0.1 + 0.2); // 0.30000000000000004
+console.log(0.1 + 0.2 === 0.3);
+
+// Conversion
+console.log(Number('23'));
+console.log(+'23');
+
+// Parsing
+console.log(Number.parseInt('30px'), 10); // 30 , base 10
+console.log(Number.parseInt('e30'), 10); // NaN , number has to be at the beginning
+console.log(Number.parseFloat('   2.5rem')); // 2.5
+console.log(Number.parseInt('   2.5rem   ')); // 2
+
+// check if a value is NaN
+console.log(Number.isNaN(20)); // false
+console.log(Number.isNaN('20')); // false
+console.log(Number.isNaN(+'20X')); // true
+console.log(Number.isNaN(23 / 0)); // false , Infinity value type
+
+// Best way of checking if a value is number
+console.log(Number.isFinite(20)); // true
+console.log(Number.isFinite('20')); // false
+console.log(Number.isFinite(+'20X')); // false
+console.log(Number.isFinite(23 / 0)); // false
+
+console.log(Number.isInteger(23)); // true
+console.log(Number.isInteger(23.0)); // true
+console.log(Number.isInteger(23 / 0)); // false
+
+// Lecture 180: Math and Rounding
+console.log(Math.sqrt(25)); // swuare root
+console.log(25 ** (1 / 2));
+console.log(25 ** (1 / 3)); // cubic root
+
+console.log(Math.max(5, 18, 23, 11, 2));
+console.log(Math.max(5, 18, '23', 11, 2));
+console.log(Math.max(5, 18, '23px', 11, 2));
+
+console.log(Math.min(5, 18, 23, 11, 2));
+
+console.log(Math.PI * Number.parseFloat('10px') ** 2);
+
+// Random values 1 - 6
+console.log(Math.trunc(Math.random() * 6) + 1);
+
+const randomInt = (min, max) =>
+  Math.floor(Math.random() * (max - min + 1)) + min;
+
+console.log(randomInt(10, 20));
+console.log(randomInt(0, 3));
+
+// Rounding integers
+console.log(Math.trunc(23.3));
+
+console.log(Math.round(23.3));
+console.log(Math.round(23.9));
+
+// Round up
+console.log(Math.ceil(23.3));
+console.log(Math.ceil(23.9));
+
+// Round down
+console.log(Math.floor(23.9));
+console.log(Math.floor('23.9'));
+
+console.log(Math.trunc(-23.3));
+console.log(Math.floor(-23.3));
+
+// Rounding decimals
+console.log((2.7).toFixed(0)); // returns String !!!
+console.log((2.7).toFixed(3));
+console.log((2.345).toFixed(2));
+console.log(+(2.345).toFixed(2)); // Convert it back to Number
+
+// Lecture 181: Remainder Operator
+console.log(5 % 2);
+console.log(5 / 2); // 5 = 2 * 2 + 1
+
+console.log(8 % 3);
+console.log(8 / 3); // 8 = 2 * 3 + 2
+
+// Check if a number is even or odd
+console.log(7 % 2); // even number
+console.log(7 / 2);
+
+const isEven = number => number % 2 === 0;
+
+console.log(isEven(8)); // true
+console.log(isEven(23)); // false
+console.log(isEven(514)); // true
+
+labelBalance.addEventListener('click', function () {
+  [...document.querySelectorAll('.movements__row')].forEach(function (row, i) {
+    // 0, 2, 4, 6
+    if (i % 2 === 0) row.style.backgroundColor = 'orangered';
+    // 0, 3, 6, 9
+    if (i % 3 === 0) row.style.backgroundColor = 'blue';
+  });
+});
+
+// Lecture 183: Working with BigInt
+console.log(2 ** 53 - 1);
+console.log(Number.MAX_SAFE_INTEGER);
+console.log(2 ** 53 + 1);
+console.log(2 ** 53 + 2);
+console.log(2 ** 53 - 3);
+console.log(2 ** 53 - 4);
+
+// ES2020 BigInt introduced
+console.log(4239091293949123094900123444123n);
+console.log(BigInt(423909129));
+
+// Operations
+console.log(10000n + 10000n);
+console.log(541982349777129838949841289318939812498n * 1000000n);
+// console.log(Math.sqrt(16n)); // ERROR
+
+const huge = 54198234977712983894912893981n;
+const num = 23;
+console.log(huge * BigInt(num));
+
+console.log(20n > 15); // true
+console.log(20n === 20); // false
+
+console.log(typeof 20n); // bigint
+console.log(20n == '20'); // true
+
+console.log(huge + 'is REALLY big !!!');
+
+// Divisions
+console.log(11n / 3n); // 3n
+console.log(10 / 3); // 3.3333333333333335
+
+// Lecture 184: Creating Dates
+// Create a date
+/*
+const now = new Date();
+console.log(now);
+
+console.log(new Date('Tue Feb 18 2025 16:21:38'));
+console.log(new Date('December 24, 2015'));
+
+console.log(new Date(account1.movementsDates[0]));
+console.log(new Date(2037, 10, 19, 15, 23, 5));
+console.log(new Date(2037, 10, 33, 15, 23, 5));
+
+console.log(new Date(0));
+// 3 days after the date above is: 3 * 24 hours * 60 mins * 60 seconds * 1000 miliseconds - timestamp of day No.3
+console.log(new Date(3 * 24 * 60 * 60 * 1000));
+*/
+
+// Working with dates
+const future = new Date(2037, 10, 19, 15, 23);
+console.log(future);
+
+console.log(future.getFullYear());
+console.log(future.getMonth()); // 0 based
+console.log(future.getDate()); // Get date
+console.log(future.getDay()); // day of the week, 4: Thursday
+console.log(future.getHours());
+console.log(future.getMinutes());
+console.log(future.getSeconds());
+
+// International standard string
+console.log(future.toISOString());
+console.log(future.getTime());
+
+console.log(new Date(2142249780000));
+
+console.log(Date.now());
+
+future.setFullYear(2040);
+console.log(future);
+
+// Lecture 187: Operations With Dates
+const future1 = new Date(2037, 10, 19, 15, 23);
+console.log(+future1);
+
+const calcDaysPassed = (date1, date2) =>
+  Math.abs(date2 - date1) / (1000 * 60 * 60 * 24);
+const days1 = calcDaysPassed(
+  new Date(2037, 3, 14),
+  new Date(2037, 3, 14, 10, 8)
+);
+console.log(days1);
+// TODO: Date library moment.js (FREE)
