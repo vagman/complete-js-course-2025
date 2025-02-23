@@ -95,41 +95,55 @@ const formatMovementDate = function (date, locale) {
   return new Intl.DateTimeFormat(locale).format(date);
 };
 
+// Lecture 189: Internationalizing Numbers (Intl)
+const formatCur = function (value, locale, currency) {
+  return new Intl.NumberFormat(locale, {
+    style: 'currency',
+    currency: currency,
+  }).format(value);
+};
+
 // Lecture 152: Creating DOM Elements
 const displayMovements = function (acc, sort = false) {
-  // Empty the container from fixed, hard-coded HTML withdrawals/deposits
   containerMovements.innerHTML = '';
-  // Lecture 186: Fixing Sorting Bug
+
   const combinedMovsDates = acc.movements.map((mov, i) => ({
     movement: mov,
     movementDate: acc.movementsDates.at(i),
   }));
-  console.log(combinedMovsDates);
 
   if (sort) combinedMovsDates.sort((a, b) => a.movement - b.movement);
 
   combinedMovsDates.forEach(function (obj, i) {
     const { movement, movementDate } = obj;
-    const date = new Date(acc.movementsDates[i]);
-    const displayDate = formatMovementDate(date, acc.locale);
     const type = movement > 0 ? 'deposit' : 'withdrawal';
 
-    // Template literal containing HTML
+    const date = new Date(movementDate);
+    const displayDate = formatMovementDate(date, acc.locale);
+
+    const formattedMov = formatCur(movement, acc.locale, acc.currency);
+
     const html = `
-        <div class="movements__row">
-          <div class="movements__type movements__type--${type}">${
+      <div class="movements__row">
+        <div class="movements__type movements__type--${type}">${
       i + 1
     } ${type}</div>
-          <div class="movements__date">${displayDate}</div>
-          <div class="movements__value">${movement.toFixed(2)}€</div>
-        </div>`;
+        <div class="movements__date">${displayDate}</div>
+        <div class="movements__value">${formattedMov}</div>
+      </div>
+    `;
+
     containerMovements.insertAdjacentHTML('afterbegin', html);
   });
 };
 
 const calcDisplayBalance = function (acc) {
   acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
-  labelBalance.textContent = `${acc.balance.toFixed(2)}€`;
+  labelBalance.textContent = `${formatCur(
+    acc.balance,
+    acc.locale,
+    acc.currency
+  )}`;
 };
 
 // Lecture 160: The magic of chaining methods
@@ -137,12 +151,12 @@ const calcDisplaySummary = function (acc) {
   const incomes = acc.movements
     .filter(mov => mov > 0)
     .reduce((acc, mov) => acc + mov, 0);
-  labelSumIn.textContent = `${incomes.toFixed(2)}€`;
+  labelSumIn.textContent = formatCur(incomes, acc.locale, acc.currency);
 
   const out = acc.movements
     .filter(mov => mov < 0)
     .reduce((acc, mov) => acc + mov, 0);
-  labelSumOut.textContent = `${Math.abs(out).toFixed(2)}€`;
+  labelSumOut.textContent = formatCur(Math.abs(out), acc.locale, acc.currency);
 
   const interest = acc.movements
     .filter(mov => mov > 0)
@@ -151,7 +165,7 @@ const calcDisplaySummary = function (acc) {
       return int >= 1;
     })
     .reduce((acc, int) => acc + int, 0);
-  labelSumInterest.textContent = `${interest.toFixed(2)}€`;
+  labelSumInterest.textContent = formatCur(interest, acc.locale, acc.currency);
 };
 
 // Lecture 156: Computing usernames for the app's users
@@ -523,3 +537,23 @@ const days1 = calcDaysPassed(
 );
 console.log(days1);
 // TODO: Date library moment.js (FREE)
+
+// Lecture 188: Internationalizing Numbers (Intl)
+const num1 = 3884764.23;
+
+const options = {
+  style: 'currency', // 'percent', 'unit', 'currency'
+  unit: 'celsius', // 'celcius', 'mile-per-hour',
+  currency: 'EUR', // 'EUR', 'USD'
+  // useGrouping: false,
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat
+};
+
+console.log('US:', new Intl.NumberFormat('en-US', options).format(num1));
+console.log('Greece:', new Intl.NumberFormat('el-GR', options).format(num1));
+console.log('Germany:', new Intl.NumberFormat('de-DE', options).format(num1));
+console.log('Syria:', new Intl.NumberFormat('ar-SY', options).format(num1));
+console.log(
+  'Browser:',
+  new Intl.NumberFormat(navigator.language, options).format(num1)
+);
