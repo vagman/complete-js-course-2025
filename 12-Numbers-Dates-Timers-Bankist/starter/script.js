@@ -287,15 +287,16 @@ btnLoan.addEventListener('click', function (e) {
   e.preventDefault();
   const amount = Math.floor(inputLoanAmount.value);
   if (amount > 0 && currentAccount.movements.some(mov => mov >= 0.1 * amount)) {
-    // Add movement
-    currentAccount.movements.push(amount);
-    console.log(currentAccount.movements);
+    setTimeout(function () {
+      // Add movement
+      currentAccount.movements.push(amount);
 
-    // Add loan date
-    currentAccount.movementsDates.push(new Date().toISOString());
+      // Add loan date
+      currentAccount.movementsDates.push(new Date().toISOString());
 
-    // Update UI
-    updateUI(currentAccount);
+      // Update UI
+      updateUI(currentAccount);
+    }, 2500);
   }
   inputLoanAmount.value = '';
 });
@@ -557,3 +558,28 @@ console.log(
   'Browser:',
   new Intl.NumberFormat(navigator.language, options).format(num1)
 );
+
+// Lecture 190: Timers: setTimeout and setInterval
+
+// setTimeout()
+const ingredients = ['olives', 'spinach'];
+const pizzaTimer = setTimeout(
+  (ing1, ing2) => console.log(`Here is your pizza with ${ing1} and ${ing2} 🍕`),
+  3000,
+  ...ingredients
+); // 3000 msec = 3 sec
+console.log('Waiting...');
+
+if (ingredients.includes('spinach')) clearTimeout(pizzaTimer); // delete timer
+
+// setInterval()
+// Challenge: create a clock that displays only hour:min:sec
+setInterval(function () {
+  const now = new Date();
+  const options = {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  };
+  console.log(new Intl.DateTimeFormat('el-GR', options).format(now));
+}, 1000);
