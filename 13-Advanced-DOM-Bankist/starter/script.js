@@ -67,3 +67,51 @@ document
     // Old way of deleting elements
     // message.parentElement.removeChild(message);
   });
+
+// Lecture 197: Styles, Attributes and Classes
+// Styles
+message.style.backgroundColor = '#37383d';
+message.style.width = '120%';
+
+// Not found although it is in style.css
+console.log(message.style.color);
+console.log(message.style.backgroundColor);
+console.log(getComputedStyle(message).color); // Computed in CSS file
+console.log(getComputedStyle(message).height);
+
+// Add 40pc to the cookie modal
+message.style.height =
+  Number.parseInt(getComputedStyle(message).height) + 40 + 'px';
+console.log(getComputedStyle(message).height);
+
+document.documentElement.style.setProperty('--color-primary', 'orangered');
+
+// Attributes
+const logo = document.querySelector('.nav__logo');
+console.log(logo.alt);
+console.log('Absolute URL: ', logo.src);
+console.log(logo.className);
+
+logo.alt = 'Beautiful minimalist logo';
+
+// Non-standard element attributes
+console.log(logo.designer);
+console.log(logo.getAttribute('designer'));
+logo.setAttribute('company', 'Bankist');
+
+console.log('Relative URL: ', logo.getAttribute('src'));
+const link = document.querySelector('.nav__link--btn');
+console.log(link.href);
+console.log(link.getAttribute('href'));
+
+// Data attroibutes: Always starts with 'data-' in HTML
+console.log(logo.dataset.versionNumber);
+
+// Classes
+logo.classList.add('c', 'j');
+logo.classList.remove('c', 'j');
+logo.classList.toggle('c');
+logo.classList.contains('c'); // Be careful: X .includes()
+
+// DO NOT use this - It will override all the existing classes
+logo.className = 'Jonas';
