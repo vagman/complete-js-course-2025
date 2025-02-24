@@ -206,12 +206,39 @@ const accountForOf = function (accounts) {
 // console.log(accountForOf(accounts));
 // Lecture 163: Implemeting Login
 // Event Handlers
-let currentAccount;
+let currentAccount, timer;
 
 // FAKE ALWAYS LOGGED IN
 // currentAccount = account1;
 // updateUI(currentAccount);
 // containerApp.style.opacity = 100;
+
+const startLogOutTimer = function () {
+  const tick = function () {
+    const min = String(Math.trunc(time / 60)).padStart(2, 0);
+    const sec = String(time % 60).padStart(2, 0);
+    // In each call, print the remaining time to the UI
+    labelTimer.textContent = `${min}:${sec}`;
+
+    // When timer expires (time = 0 seconds) stop timer and log out current user
+    if (time === 0) {
+      clearInterval(timer);
+      containerApp.style.opacity = 0;
+      labelWelcome.textContent = 'Log in to get started';
+    }
+
+    // Decrease by 1 second
+    time--;
+  };
+
+  // Set time to 10 mins
+  let time = 120;
+
+  // Call the timer every second
+  tick(); // Called immidiently once and then every other second
+  const timer = setInterval(tick, 1000);
+  return timer;
+};
 
 btnLogin.addEventListener('click', function (e) {
   // Prevent form from submiting, using and event arguement
@@ -251,6 +278,9 @@ btnLogin.addEventListener('click', function (e) {
     // labelDate.textContent = `${day}/${month}/${year}, ${hour}:${min}`;
     // Clear login input fields
     inputLoginUsername.value = inputLoginPin.value = '';
+
+    if (timer) clearInterval(timer);
+    timer = startLogOutTimer();
     // Remove focus on PIN element: inputLoginPin.blur(); (non needed in Chrome)
     updateUI(currentAccount);
   }
@@ -279,6 +309,10 @@ btnTransfer.addEventListener('click', function (e) {
 
     // Update UI
     updateUI(currentAccount);
+
+    // Reset Taimer
+    clearInterval(timer);
+    timer = startLogOutTimer();
   }
 });
 
@@ -296,6 +330,10 @@ btnLoan.addEventListener('click', function (e) {
 
       // Update UI
       updateUI(currentAccount);
+
+      // Reset Taimer
+      clearInterval(timer);
+      timer = startLogOutTimer();
     }, 2500);
   }
   inputLoanAmount.value = '';
@@ -560,7 +598,6 @@ console.log(
 );
 
 // Lecture 190: Timers: setTimeout and setInterval
-
 // setTimeout()
 const ingredients = ['olives', 'spinach'];
 const pizzaTimer = setTimeout(
