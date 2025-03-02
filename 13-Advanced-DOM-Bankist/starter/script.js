@@ -222,3 +222,32 @@ setTimeout(() => h1.removeEventListener('mouseenter', alertH1), 3000);
 // });
 
 // Lecture 202: Event delegation. Implemeting page navigation
+// Lecture 203: DOM Traversing
+const h01 = document.querySelector('h1');
+
+// Going downwrads (selecting child elements)...
+console.log(h01.querySelectorAll('.highlight'));
+console.log(h01.childNodes);
+console.log(h01.children); // Only works for direct children
+h01.firstElementChild.style.color = 'white';
+h01.lastElementChild.style.color = 'orangered';
+
+// Going upwards (selecting parent elements)
+console.log(h01.parentNode.parentNode.parentNode.parentNode.parentNode);
+h01.closest('.header').style.background = 'var(--gradient-secondary)';
+
+// Going sideways (selecting siblings)...
+// We can only get to the previous and the next one
+console.log(h01.previousElementSibling); // null - doesnt have previous
+console.log(h01.nextElementSibling); // <h4>
+
+console.log(h01.previousSibling);
+console.log(h01.nextSibling);
+
+// Trick for getting all the siblings: Going to parents and finding all children elements
+console.log(h01.parentElement.children);
+[...h01.parentElement.children].forEach(el => {
+  if (el !== h1) {
+    el.style.transform = 'scale(0.5)';
+  }
+});
