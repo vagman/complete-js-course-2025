@@ -129,6 +129,14 @@ const handleHover = function (e) {
 nav.addEventListener('mouseover', handleHover.bind(0.5));
 nav.addEventListener('mouseout', handleHover.bind(1));
 
+// Sticky navigation
+const initialCoords = section1.getBoundingClientRect();
+
+window.addEventListener('scroll', function () {
+  if (this.window.scrollY > initialCoords.top) nav.classList.add('sticky');
+  else nav.classList.remove('sticky');
+});
+
 //////////////////////////////
 // Lecture 196: Selecting, Creating, and Deleting Elements
 // Selecting Elements
@@ -216,7 +224,7 @@ logo.classList.toggle('c');
 logo.classList.contains('c'); // Be careful: X .includes()
 
 // DO NOT use this - It will override all the existing classes
-logo.className = 'Jonas';
+// logo.className = 'Jonas';
 // Lecture 198: Implementing Smooth Scrolling
 
 // Lecture 199: Types of Events and Event Handlers
