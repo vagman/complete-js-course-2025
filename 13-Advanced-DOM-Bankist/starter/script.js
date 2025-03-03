@@ -6,6 +6,12 @@ const btnCloseModal = document.querySelector('.btn--close-modal');
 const btnsOpenModal = document.querySelectorAll('.btn--show-modal');
 const btnScrollTo = document.querySelector('.btn--scroll-to');
 const section1 = document.querySelector('#section--1');
+const nav = document.querySelector('.nav');
+// Selecting tabs
+const tabs = document.querySelectorAll('.operations__tab');
+const tabsContainer = document.querySelector('.operations__tab-container');
+const tabsContent = document.querySelectorAll('.operations__content');
+
 // Modal window
 
 const openModal = function (e) {
@@ -85,14 +91,10 @@ document.querySelector('.nav__links').addEventListener('click', function (e) {
 });
 
 // Lecture 204: Building a tabbed component
-// Selecting tabs
-const tabs = document.querySelectorAll('.operations__tab');
-const tabsContainer = document.querySelector('.operations__tab-container');
-const tabsContent = document.querySelectorAll('.operations__content');
-
 tabsContainer.addEventListener('click', function (e) {
   e.preventDefault();
   const clicked = e.target.closest('.operations__tab');
+  // Guard clause
   if (!clicked) return;
   // Same as the above
   // if (clicked) {
@@ -107,6 +109,25 @@ tabsContainer.addEventListener('click', function (e) {
     .querySelector(`.operations__content--${clicked.dataset.tab}`)
     .classList.add('operations__content--active');
 });
+
+// Lecture 205: Passing Arguments to Event Handlers
+// Menu fade animation
+const handleHover = function (e) {
+  if (e.target.classList.contains('nav__link')) {
+    const link = e.target;
+    const siblings = link.closest('.nav').querySelectorAll('.nav__link');
+    const logo = link.closest('.nav').querySelector('img');
+
+    siblings.forEach(el => {
+      if (el !== link) el.style.opacity = this;
+    });
+    logo.style.opacity = this;
+  }
+};
+
+// Passing an "argument" into a handler
+nav.addEventListener('mouseover', handleHover.bind(0.5));
+nav.addEventListener('mouseout', handleHover.bind(1));
 
 //////////////////////////////
 // Lecture 196: Selecting, Creating, and Deleting Elements
@@ -203,7 +224,7 @@ const h1 = document.querySelector('h1');
 
 // Remove EventListener once and then remove it
 const alertH1 = function (e) {
-  alert('addEventListener: Great! You are reading the heading :D');
+  // alert('addEventListener: Great! You are reading the heading :D');
   // h1.removeEventListener('mouseenter', alertH1);
 };
 
@@ -252,12 +273,12 @@ const h01 = document.querySelector('h1');
 console.log(h01.querySelectorAll('.highlight'));
 console.log(h01.childNodes);
 console.log(h01.children); // Only works for direct children
-h01.firstElementChild.style.color = 'white';
-h01.lastElementChild.style.color = 'orangered';
+// h01.firstElementChild.style.color = 'white';
+// h01.lastElementChild.style.color = 'orangered';
 
 // Going upwards (selecting parent elements)
 console.log(h01.parentNode.parentNode.parentNode.parentNode.parentNode);
-h01.closest('.header').style.background = 'var(--gradient-secondary)';
+// h01.closest('.header').style.background = 'var(--gradient-secondary)';
 
 // Going sideways (selecting siblings)...
 // We can only get to the previous and the next one
