@@ -84,8 +84,31 @@ document.querySelector('.nav__links').addEventListener('click', function (e) {
   }
 });
 
-//////////////////////////////
+// Lecture 204: Building a tabbed component
+// Selecting tabs
+const tabs = document.querySelectorAll('.operations__tab');
+const tabsContainer = document.querySelector('.operations__tab-container');
+const tabsContent = document.querySelectorAll('.operations__content');
 
+tabsContainer.addEventListener('click', function (e) {
+  e.preventDefault();
+  const clicked = e.target.closest('.operations__tab');
+  if (!clicked) return;
+  // Same as the above
+  // if (clicked) {
+  //   clicked.classList.add('operations__tab--active');
+  // }
+  tabs.forEach(t => t.classList.remove('operations__tab--active'));
+  clicked.classList.add('operations__tab--active');
+  tabsContent.forEach(c => c.classList.remove('operations__content--active'));
+
+  // Activate content area
+  document
+    .querySelector(`.operations__content--${clicked.dataset.tab}`)
+    .classList.add('operations__content--active');
+});
+
+//////////////////////////////
 // Lecture 196: Selecting, Creating, and Deleting Elements
 // Selecting Elements
 console.log(document.documentElement);
