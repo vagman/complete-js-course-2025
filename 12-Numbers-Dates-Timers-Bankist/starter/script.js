@@ -21,9 +21,9 @@ const account1 = {
     '2020-01-28T09:15:04.904Z',
     '2020-04-01T10:17:24.185Z',
     '2020-05-08T14:11:59.604Z',
-    '2020-05-27T17:01:17.194Z',
-    '2020-07-11T23:36:17.929Z',
-    '2020-07-12T10:51:36.790Z',
+    '2025-02-15T17:01:17.194Z',
+    '2025-02-19T23:36:17.929Z',
+    '2025-02-21T10:51:36.790Z',
   ],
   currency: 'EUR',
   locale: 'pt-PT', // de-DE
@@ -41,9 +41,9 @@ const account2 = {
     '2019-12-25T06:04:23.907Z',
     '2020-01-25T14:18:46.235Z',
     '2020-02-05T16:33:06.386Z',
-    '2020-04-10T14:43:26.374Z',
-    '2020-06-25T18:49:59.371Z',
-    '2020-07-26T12:01:20.894Z',
+    '2025-02-15T14:43:26.374Z',
+    '2025-02-19T18:49:59.371Z',
+    '2025-02-21T12:01:20.894Z',
   ],
   currency: 'USD',
   locale: 'en-US',
@@ -78,52 +78,72 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
-const formatMovementDate = function (date) {
+const formatMovementDate = function (date, locale) {
   const calcDaysPassed = (date1, date2) =>
     Math.round(Math.abs(date2 - date1) / (1000 * 60 * 60 * 24));
   const daysPassed = calcDaysPassed(new Date(), date);
   console.log(daysPassed);
-  const day = `${date.getDate()}`.padStart(2, 0);
-  const month = `${date.getMonth() + 1}`.padStart(2, 0); // zero based !!!
-  const year = date.getFullYear();
-  return `${day}/${month}${year}`;
+
+  if (daysPassed === 0) return 'Today';
+  if (daysPassed === 1) return 'Yesterday';
+  if (daysPassed <= 7) return `${daysPassed} days ago`;
+
+  // const day = `${date.getDate()}`.padStart(2, 0);
+  // const month = `${date.getMonth() + 1}`.padStart(2, 0); // zero based !!!
+  // const year = date.getFullYear();
+  // return `${day}/${month}${year}`;
+  return new Intl.DateTimeFormat(locale).format(date);
+};
+
+// Lecture 189: Internationalizing Numbers (Intl)
+const formatCur = function (value, locale, currency) {
+  return new Intl.NumberFormat(locale, {
+    style: 'currency',
+    currency: currency,
+  }).format(value);
 };
 
 // Lecture 152: Creating DOM Elements
 const displayMovements = function (acc, sort = false) {
-  // Empty the container from fixed, hard-coded HTML withdrawals/deposits
   containerMovements.innerHTML = '';
-  // Lecture 186: Fixing Sorting Bug
+
   const combinedMovsDates = acc.movements.map((mov, i) => ({
     movement: mov,
     movementDate: acc.movementsDates.at(i),
   }));
-  console.log(combinedMovsDates);
 
   if (sort) combinedMovsDates.sort((a, b) => a.movement - b.movement);
 
   combinedMovsDates.forEach(function (obj, i) {
     const { movement, movementDate } = obj;
-    const date = new Date(acc.movementsDates[i]);
-    const displayDate = formatMovementDate(date);
     const type = movement > 0 ? 'deposit' : 'withdrawal';
 
-    // Template literal containing HTML
+    const date = new Date(movementDate);
+    const displayDate = formatMovementDate(date, acc.locale);
+
+    const formattedMov = formatCur(movement, acc.locale, acc.currency);
+
     const html = `
-        <div class="movements__row">
-          <div class="movements__type movements__type--${type}">${
+      <div class="movements__row">
+        <div class="movements__type movements__type--${type}">${
       i + 1
     } ${type}</div>
-          <div class="movements__date">${displayDate}</div>
-          <div class="movements__value">${movement.toFixed(2)}€</div>
-        </div>`;
+        <div class="movements__date">${displayDate}</div>
+        <div class="movements__value">${formattedMov}</div>
+      </div>
+    `;
+
     containerMovements.insertAdjacentHTML('afterbegin', html);
   });
 };
 
 const calcDisplayBalance = function (acc) {
   acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
-  labelBalance.textContent = `${acc.balance.toFixed(2)}€`;
+  labelBalance.textContent = `${formatCur(
+    acc.balance,
+    acc.locale,
+    acc.currency
+  )}`;
 };
 
 // Lecture 160: The magic of chaining methods
@@ -131,12 +151,12 @@ const calcDisplaySummary = function (acc) {
   const incomes = acc.movements
     .filter(mov => mov > 0)
     .reduce((acc, mov) => acc + mov, 0);
-  labelSumIn.textContent = `${incomes.toFixed(2)}€`;
+  labelSumIn.textContent = formatCur(incomes, acc.locale, acc.currency);
 
   const out = acc.movements
     .filter(mov => mov < 0)
     .reduce((acc, mov) => acc + mov, 0);
-  labelSumOut.textContent = `${Math.abs(out).toFixed(2)}€`;
+  labelSumOut.textContent = formatCur(Math.abs(out), acc.locale, acc.currency);
 
   const interest = acc.movements
     .filter(mov => mov > 0)
@@ -145,7 +165,7 @@ const calcDisplaySummary = function (acc) {
       return int >= 1;
     })
     .reduce((acc, int) => acc + int, 0);
-  labelSumInterest.textContent = `${interest.toFixed(2)}€`;
+  labelSumInterest.textContent = formatCur(interest, acc.locale, acc.currency);
 };
 
 // Lecture 156: Computing usernames for the app's users
@@ -186,12 +206,39 @@ const accountForOf = function (accounts) {
 // console.log(accountForOf(accounts));
 // Lecture 163: Implemeting Login
 // Event Handlers
-let currentAccount;
+let currentAccount, timer;
 
 // FAKE ALWAYS LOGGED IN
 // currentAccount = account1;
 // updateUI(currentAccount);
 // containerApp.style.opacity = 100;
+
+const startLogOutTimer = function () {
+  const tick = function () {
+    const min = String(Math.trunc(time / 60)).padStart(2, 0);
+    const sec = String(time % 60).padStart(2, 0);
+    // In each call, print the remaining time to the UI
+    labelTimer.textContent = `${min}:${sec}`;
+
+    // When timer expires (time = 0 seconds) stop timer and log out current user
+    if (time === 0) {
+      clearInterval(timer);
+      containerApp.style.opacity = 0;
+      labelWelcome.textContent = 'Log in to get started';
+    }
+
+    // Decrease by 1 second
+    time--;
+  };
+
+  // Set time to 10 mins
+  let time = 120;
+
+  // Call the timer every second
+  tick(); // Called immidiently once and then every other second
+  const timer = setInterval(tick, 1000);
+  return timer;
+};
 
 btnLogin.addEventListener('click', function (e) {
   // Prevent form from submiting, using and event arguement
@@ -208,15 +255,32 @@ btnLogin.addEventListener('click', function (e) {
 
     // Create current date and time
     const now = new Date();
+    const options = {
+      hour: 'numeric',
+      minute: 'numeric',
+      day: 'numeric',
+      month: 'numeric', // 'long', 'numeric', '2-digit', 'short'
+      year: 'numeric', // '2-digit'
+      // weekday: 'numeric', // 'short', 'long', 'narrow
+    };
+
+    labelDate.textContent = new Intl.DateTimeFormat(
+      currentAccount.locale,
+      options
+    ).format(now);
+    // Language Code Table: http://www.lingoes.net/en/translator/langcode.htm
     // the format we want is: dd/mm/YYYY
-    const day = `${now.getDate()}`.padStart(2, 0);
-    const month = `${now.getMonth() + 1}`.padStart(2, 0); // zero based !!!
-    const year = now.getFullYear();
-    const hour = `${now.getHours()}`.padStart(2, 0);
-    const min = `${now.getMinutes()}`.padStart(2, 0);
-    labelDate.textContent = `${day}/${month}/${year}, ${hour}:${min}`;
+    // const day = `${now.getDate()}`.padStart(2, 0);
+    // const month = `${now.getMonth() + 1}`.padStart(2, 0); // zero based !!!
+    // const year = now.getFullYear();
+    // const hour = `${now.getHours()}`.padStart(2, 0);
+    // const min = `${now.getMinutes()}`.padStart(2, 0);
+    // labelDate.textContent = `${day}/${month}/${year}, ${hour}:${min}`;
     // Clear login input fields
     inputLoginUsername.value = inputLoginPin.value = '';
+
+    if (timer) clearInterval(timer);
+    timer = startLogOutTimer();
     // Remove focus on PIN element: inputLoginPin.blur(); (non needed in Chrome)
     updateUI(currentAccount);
   }
@@ -245,6 +309,10 @@ btnTransfer.addEventListener('click', function (e) {
 
     // Update UI
     updateUI(currentAccount);
+
+    // Reset Taimer
+    clearInterval(timer);
+    timer = startLogOutTimer();
   }
 });
 
@@ -253,15 +321,20 @@ btnLoan.addEventListener('click', function (e) {
   e.preventDefault();
   const amount = Math.floor(inputLoanAmount.value);
   if (amount > 0 && currentAccount.movements.some(mov => mov >= 0.1 * amount)) {
-    // Add movement
-    currentAccount.movements.push(amount);
-    console.log(currentAccount.movements);
+    setTimeout(function () {
+      // Add movement
+      currentAccount.movements.push(amount);
 
-    // Add loan date
-    currentAccount.movementsDates.push(new Date().toISOString());
+      // Add loan date
+      currentAccount.movementsDates.push(new Date().toISOString());
 
-    // Update UI
-    updateUI(currentAccount);
+      // Update UI
+      updateUI(currentAccount);
+
+      // Reset Taimer
+      clearInterval(timer);
+      timer = startLogOutTimer();
+    }, 2500);
   }
   inputLoanAmount.value = '';
 });
@@ -503,3 +576,47 @@ const days1 = calcDaysPassed(
 );
 console.log(days1);
 // TODO: Date library moment.js (FREE)
+
+// Lecture 188: Internationalizing Numbers (Intl)
+const num1 = 3884764.23;
+
+const options = {
+  style: 'currency', // 'percent', 'unit', 'currency'
+  unit: 'celsius', // 'celcius', 'mile-per-hour',
+  currency: 'EUR', // 'EUR', 'USD'
+  // useGrouping: false,
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat
+};
+
+console.log('US:', new Intl.NumberFormat('en-US', options).format(num1));
+console.log('Greece:', new Intl.NumberFormat('el-GR', options).format(num1));
+console.log('Germany:', new Intl.NumberFormat('de-DE', options).format(num1));
+console.log('Syria:', new Intl.NumberFormat('ar-SY', options).format(num1));
+console.log(
+  'Browser:',
+  new Intl.NumberFormat(navigator.language, options).format(num1)
+);
+
+// Lecture 190: Timers: setTimeout and setInterval
+// setTimeout()
+const ingredients = ['olives', 'spinach'];
+const pizzaTimer = setTimeout(
+  (ing1, ing2) => console.log(`Here is your pizza with ${ing1} and ${ing2} 🍕`),
+  3000,
+  ...ingredients
+); // 3000 msec = 3 sec
+console.log('Waiting...');
+
+if (ingredients.includes('spinach')) clearTimeout(pizzaTimer); // delete timer
+
+// setInterval()
+// Challenge: create a clock that displays only hour:min:sec
+setInterval(function () {
+  const now = new Date();
+  const options = {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  };
+  console.log(new Intl.DateTimeFormat('el-GR', options).format(now));
+}, 1000);
