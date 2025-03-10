@@ -6,6 +6,7 @@ const btnCloseModal = document.querySelector('.btn--close-modal');
 const btnsOpenModal = document.querySelectorAll('.btn--show-modal');
 const btnScrollTo = document.querySelector('.btn--scroll-to');
 const section1 = document.querySelector('#section--1');
+const header = document.querySelector('.header');
 const nav = document.querySelector('.nav');
 // Selecting tabs
 const tabs = document.querySelectorAll('.operations__tab');
@@ -13,7 +14,6 @@ const tabsContainer = document.querySelector('.operations__tab-container');
 const tabsContent = document.querySelectorAll('.operations__content');
 
 // Modal window
-
 const openModal = function (e) {
   e.preventDefault();
   modal.classList.remove('hidden');
@@ -132,10 +132,44 @@ nav.addEventListener('mouseout', handleHover.bind(1));
 // Sticky navigation
 const initialCoords = section1.getBoundingClientRect();
 
-window.addEventListener('scroll', function () {
-  if (this.window.scrollY > initialCoords.top) nav.classList.add('sticky');
-  else nav.classList.remove('sticky');
+// window.addEventListener('scroll', function () {
+//   if (this.window.scrollY > initialCoords.top) nav.classList.add('sticky');
+//   else nav.classList.remove('sticky');
+// });
+
+// Lecture 207: A better way the Sticky navigation: Intersection Observer API
+// const obsCallback = function (entries, observer) {
+//   entries.forEach(entry => {
+//     console.log(entry);
+//   });
+// };
+
+// const obsOptions = {
+//   root: null,
+//   threshold: [0, 0.2],
+// };
+
+// const observer = new IntersectionObserver(obsCallback, obsOptions);
+// observer.observe(section1);
+
+///////////////////////////////////////
+// Sticky navigation: Intersection Observer API
+const navHeight = nav.getBoundingClientRect().height;
+
+const stickyNav = function (entries) {
+  const [entry] = entries;
+  if (!entry.isIntersecting) {
+    nav.classList.add('sticky');
+  } else nav.classList.remove('sticky');
+};
+
+const headerObserver = new IntersectionObserver(stickyNav, {
+  root: null,
+  threshold: 0,
+  rootMargin: `-${navHeight}px`,
 });
+
+headerObserver.observe(header);
 
 //////////////////////////////
 // Lecture 196: Selecting, Creating, and Deleting Elements
@@ -144,7 +178,7 @@ console.log(document.documentElement);
 console.log(document.head);
 console.log(document.body);
 
-const header = document.querySelector('.header');
+const header1 = document.querySelector('.header');
 const allSections = document.querySelectorAll('.section');
 console.log(allSections);
 
@@ -164,19 +198,19 @@ message.innerHTML =
   'We use cookies for improved functionality and analytics <button class="btn btn--close-cookie">Got it!</button>';
 
 //header.prepend(message);
-header.append(message);
+// header.append(message);
 // header.append(message.cloneNode(true));
 // header.before(message);
 // header.after(message);
 
 // Deleting Elements
-document
-  .querySelector('.btn--close-cookie')
-  .addEventListener('click', function () {
-    message.remove();
-    // Old way of deleting elements
-    // message.parentElement.removeChild(message);
-  });
+// document
+//   .querySelector('.btn--close-cookie')
+//   .addEventListener('click', function () {
+//     message.remove();
+//     // Old way of deleting elements
+//     // message.parentElement.removeChild(message);
+//   });
 
 // Lecture 197: Styles, Attributes and Classes
 // Styles
