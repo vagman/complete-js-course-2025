@@ -38,12 +38,12 @@ document.addEventListener('keydown', function (e) {
 // Button scrolling
 btnScrollTo.addEventListener('click', function (e) {
   const s1coords = section1.getBoundingClientRect();
-  console.log(s1coords);
+  // console.log(s1coords);
 
   // x (top), y (left) = distance of the element from the left and top of the browser window
-  console.log(e.target.getBoundingClientRect());
+  // console.log(e.target.getBoundingClientRect());
   // Deprecation:
-  console.log('Current scroll (X/Y)', window.pageXOffset, window.pageYOffset);
+  // console.log('Current scroll (X/Y)', window.pageXOffset, window.pageYOffset);
 
   console.log(
     'height/width viewport',
@@ -132,6 +132,9 @@ nav.addEventListener('mouseout', handleHover.bind(1));
 // Sticky navigation
 const initialCoords = section1.getBoundingClientRect();
 
+///////////////////////////////////////
+// Commented out code block below because it was interfering with headerObserver
+
 // window.addEventListener('scroll', function () {
 //   if (this.window.scrollY > initialCoords.top) nav.classList.add('sticky');
 //   else nav.classList.remove('sticky');
@@ -155,7 +158,6 @@ const initialCoords = section1.getBoundingClientRect();
 ///////////////////////////////////////
 // Sticky navigation: Intersection Observer API
 const navHeight = nav.getBoundingClientRect().height;
-
 const stickyNav = function (entries) {
   const [entry] = entries;
   if (!entry.isIntersecting) {
@@ -171,23 +173,45 @@ const headerObserver = new IntersectionObserver(stickyNav, {
 
 headerObserver.observe(header);
 
+// Lecture 208: Revealing Elements on Scroll
+const allSections = document.querySelectorAll('.section');
+
+const revealSection = function (entries, observer) {
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+    entry.target.classList.remove('section--hidden');
+    // Stop the observer from observing the sections after all of them are visible
+    observer.unobserve(entry.target);
+  });
+};
+
+const sectionObserver = new IntersectionObserver(revealSection, {
+  root: null,
+  threshold: 0.15,
+});
+
+allSections.forEach(function (section) {
+  sectionObserver.observe(section);
+  section.classList.add('section--hidden');
+});
+
 //////////////////////////////
 // Lecture 196: Selecting, Creating, and Deleting Elements
 // Selecting Elements
-console.log(document.documentElement);
-console.log(document.head);
-console.log(document.body);
+// console.log(document.documentElement);
+// console.log(document.head);
+// console.log(document.body);
 
 const header1 = document.querySelector('.header');
-const allSections = document.querySelectorAll('.section');
-console.log(allSections);
+// const allSections = document.querySelectorAll('.section');
+// console.log(allSections);
 
 document.getElementById('section--1');
 const allButtons = document.getElementsByTagName('button');
 
-console.log(allButtons); // Returns a HTMLcollection
+// console.log(allButtons); // Returns a HTMLcollection
 
-console.log(document.getElementsByClassName('btn'));
+// console.log(document.getElementsByClassName('btn'));
 
 // Creating & Inserting Elements
 // .insertAdjacentHTML --> Bankist app Section 12
@@ -218,38 +242,38 @@ message.style.backgroundColor = '#37383d';
 message.style.width = '120%';
 
 // Not found although it is in style.css
-console.log(message.style.color);
-console.log(message.style.backgroundColor);
-console.log(getComputedStyle(message).color); // Computed in CSS file
-console.log(getComputedStyle(message).height);
+// console.log(message.style.color);
+// console.log(message.style.backgroundColor);
+// console.log(getComputedStyle(message).color); // Computed in CSS file
+// console.log(getComputedStyle(message).height);
 
 // Add 40pc to the cookie modal
 message.style.height =
   Number.parseInt(getComputedStyle(message).height) + 40 + 'px';
-console.log(getComputedStyle(message).height);
+// console.log(getComputedStyle(message).height);
 
 document.documentElement.style.setProperty('--color-primary', 'orangered');
 
 // Attributes
 const logo = document.querySelector('.nav__logo');
-console.log(logo.alt);
-console.log('Absolute URL: ', logo.src);
-console.log(logo.className);
+// console.log(logo.alt);
+// console.log('Absolute URL: ', logo.src);
+// console.log(logo.className);
 
 logo.alt = 'Beautiful minimalist logo';
 
 // Non-standard element attributes
-console.log(logo.designer);
-console.log(logo.getAttribute('designer'));
+// console.log(logo.designer);
+// console.log(logo.getAttribute('designer'));
 logo.setAttribute('company', 'Bankist');
 
-console.log('Relative URL: ', logo.getAttribute('src'));
+// console.log('Relative URL: ', logo.getAttribute('src'));
 const link = document.querySelector('.nav__link--btn');
-console.log(link.href);
-console.log(link.getAttribute('href'));
+// console.log(link.href);
+// console.log(link.getAttribute('href'));
 
 // Data attroibutes: Always starts with 'data-' in HTML
-console.log(logo.dataset.versionNumber);
+// console.log(logo.dataset.versionNumber);
 
 // Classes
 logo.classList.add('c', 'j');
@@ -312,26 +336,26 @@ setTimeout(() => h1.removeEventListener('mouseenter', alertH1), 3000);
 const h01 = document.querySelector('h1');
 
 // Going downwrads (selecting child elements)...
-console.log(h01.querySelectorAll('.highlight'));
-console.log(h01.childNodes);
-console.log(h01.children); // Only works for direct children
+// console.log(h01.querySelectorAll('.highlight'));
+// console.log(h01.childNodes);
+// console.log(h01.children); // Only works for direct children
 // h01.firstElementChild.style.color = 'white';
 // h01.lastElementChild.style.color = 'orangered';
 
 // Going upwards (selecting parent elements)
-console.log(h01.parentNode.parentNode.parentNode.parentNode.parentNode);
+// console.log(h01.parentNode.parentNode.parentNode.parentNode.parentNode);
 // h01.closest('.header').style.background = 'var(--gradient-secondary)';
 
 // Going sideways (selecting siblings)...
 // We can only get to the previous and the next one
-console.log(h01.previousElementSibling); // null - doesnt have previous
-console.log(h01.nextElementSibling); // <h4>
+// console.log(h01.previousElementSibling); // null - doesnt have previous
+// console.log(h01.nextElementSibling); // <h4>
 
-console.log(h01.previousSibling);
-console.log(h01.nextSibling);
+// console.log(h01.previousSibling);
+// console.log(h01.nextSibling);
 
 // Trick for getting all the siblings: Going to parents and finding all children elements
-console.log(h01.parentElement.children);
+// console.log(h01.parentElement.children);
 [...h01.parentElement.children].forEach(el => {
   if (el !== h1) {
     el.style.transform = 'scale(0.5)';
