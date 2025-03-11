@@ -192,8 +192,85 @@ const sectionObserver = new IntersectionObserver(revealSection, {
 
 allSections.forEach(function (section) {
   sectionObserver.observe(section);
-  section.classList.add('section--hidden');
+  // section.classList.add('section--hidden');
 });
+
+// Lecture 210: Lazy loading images using Observer API
+const imgTargets = document.querySelectorAll('img[data-src]');
+
+const loadImg = function (entries, observer) {
+  const [entry] = entries;
+
+  if (!entry.isIntersecting) return;
+  // Replace src with data-src
+  entry.target.src = entry.target.dataset.src;
+  // entry.target is a signel image
+
+  entry.target.addEventListener('load', function () {
+    entry.target.classList.remove('lazy-img');
+  });
+
+  observer.unobserve(entry.target);
+};
+
+const imgObserver = new IntersectionObserver(loadImg, {
+  root: null,
+  threshold: 0,
+});
+
+imgTargets.forEach(img => {
+  imgObserver.observe(img);
+});
+
+// Lecture 211: Building a slider component
+const slides = document.querySelectorAll('.slide');
+const btnLeft = document.querySelector('.slider__btn--left');
+const btnRight = document.querySelector('.slider__btn--right');
+
+let curSlide = 0;
+const maxSlide = slides.length; // 4 image slides in total
+
+// Next 3 lines are of developing purposes only - see all 4 images in viewport
+// const slider = document.querySelector('.slider');
+// slider.style.transform = 'scale(0.4) translateX(-1200px)';
+// slider.style.overflow = 'visible';
+
+// Putting all slides side-by-side instead of on top of each other
+slides.forEach((s, i) => (s.style.transform = `translateX(${100 * i}%)`));
+// 1st 0%, 2nd slide: 100%, 3rd slide: 200%
+
+// DRY: Refactoring reusable code
+const goToSlide = function (slide) {
+  slides.forEach(
+    (s, i) => (s.style.transform = `translateX(${100 * (i - slide)}%)`)
+  );
+};
+
+// Initialize slider to slide No.0 every time app runs
+goToSlide(0);
+
+// DRY: Refactoring v.2
+const nextSlide = function () {
+  if (curSlide === maxSlide - 1) {
+    curSlide = 0;
+  } else {
+    curSlide++;
+  }
+  goToSlide(curSlide);
+};
+
+const prevSlide = function () {
+  if (curSlide === 0) {
+    curSlide = maxSlide - 1;
+  } else {
+    curSlide--;
+  }
+  goToSlide(curSlide);
+};
+
+// Listeners to go back/forth in image slides
+btnRight.addEventListener('click', nextSlide);
+btnLeft.addEventListener('click', prevSlide);
 
 //////////////////////////////
 // Lecture 196: Selecting, Creating, and Deleting Elements
