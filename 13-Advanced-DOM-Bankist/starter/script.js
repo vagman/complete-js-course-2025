@@ -12,6 +12,7 @@ const nav = document.querySelector('.nav');
 const tabs = document.querySelectorAll('.operations__tab');
 const tabsContainer = document.querySelector('.operations__tab-container');
 const tabsContent = document.querySelectorAll('.operations__content');
+const dotContainer = document.querySelector('.dots');
 
 // Modal window
 const openModal = function (e) {
@@ -223,55 +224,98 @@ imgTargets.forEach(img => {
 });
 
 // Lecture 211: Building a slider component
-const slides = document.querySelectorAll('.slide');
-const btnLeft = document.querySelector('.slider__btn--left');
-const btnRight = document.querySelector('.slider__btn--right');
+// Slider
+const slider = function () {
+  const slides = document.querySelectorAll('.slide');
+  const btnLeft = document.querySelector('.slider__btn--left');
+  const btnRight = document.querySelector('.slider__btn--right');
 
-let curSlide = 0;
-const maxSlide = slides.length; // 4 image slides in total
+  let curSlide = 0;
+  const maxSlide = slides.length; // 4 image slides in total
 
-// Next 3 lines are of developing purposes only - see all 4 images in viewport
-// const slider = document.querySelector('.slider');
-// slider.style.transform = 'scale(0.4) translateX(-1200px)';
-// slider.style.overflow = 'visible';
+  // Functions
+  const createDots = function () {
+    slides.forEach(function (_, index) {
+      dotContainer.insertAdjacentHTML(
+        'beforeend',
+        `<button class="dots__dot" data-slide="${index}"></button>`
+      );
+    });
+  };
 
-// Putting all slides side-by-side instead of on top of each other
-slides.forEach((s, i) => (s.style.transform = `translateX(${100 * i}%)`));
-// 1st 0%, 2nd slide: 100%, 3rd slide: 200%
+  const activateDot = function (slide) {
+    // Remove all active classes on every dot
+    document
+      .querySelectorAll('.dots__dot')
+      .forEach(dot => dot.classList.remove('dots__dot--active'));
 
-// DRY: Refactoring reusable code
-const goToSlide = function (slide) {
-  slides.forEach(
-    (s, i) => (s.style.transform = `translateX(${100 * (i - slide)}%)`)
-  );
+    // Select active dot
+    document
+      .querySelector(`.dots__dot[data-slide="${slide}"]`)
+      .classList.add('dots__dot--active');
+  };
+
+  // Putting all slides side-by-side instead of on top of each other
+  slides.forEach((s, i) => (s.style.transform = `translateX(${100 * i}%)`));
+  // 1st 0%, 2nd slide: 100%, 3rd slide: 200%
+
+  // DRY: Refactoring reusable code
+  const goToSlide = function (slide) {
+    slides.forEach(
+      (s, i) => (s.style.transform = `translateX(${100 * (i - slide)}%)`)
+    );
+  };
+
+  // DRY: Refactoring v.2
+  const nextSlide = function () {
+    if (curSlide === maxSlide - 1) {
+      curSlide = 0;
+    } else {
+      curSlide++;
+    }
+    goToSlide(curSlide);
+    activateDot(curSlide);
+  };
+
+  const prevSlide = function () {
+    if (curSlide === 0) {
+      curSlide = maxSlide - 1;
+    } else {
+      curSlide--;
+    }
+    goToSlide(curSlide);
+    activateDot(curSlide);
+  };
+
+  const init = function () {
+    // Initialize slider to slide No.0 every time app runs
+    goToSlide(0);
+    createDots();
+    activateDot(0);
+  };
+  init();
+
+  // Event handlers
+  // Listeners to go back/forth in image slides
+  btnRight.addEventListener('click', nextSlide);
+  btnLeft.addEventListener('click', prevSlide);
+
+  // Lecture 212: Building a slider component - Part 2
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowLeft') prevSlide();
+    e.key === 'ArrowRight' && nextSlide();
+  });
+
+  dotContainer.addEventListener('click', function (e) {
+    if (e.target.classList.contains('dots__dot')) {
+      const curSlide = Number(e.target.dataset.slide);
+      goToSlide(curSlide);
+      activateDot(curSlide);
+    }
+  });
 };
 
-// Initialize slider to slide No.0 every time app runs
-goToSlide(0);
-
-// DRY: Refactoring v.2
-const nextSlide = function () {
-  if (curSlide === maxSlide - 1) {
-    curSlide = 0;
-  } else {
-    curSlide++;
-  }
-  goToSlide(curSlide);
-};
-
-const prevSlide = function () {
-  if (curSlide === 0) {
-    curSlide = maxSlide - 1;
-  } else {
-    curSlide--;
-  }
-  goToSlide(curSlide);
-};
-
-// Listeners to go back/forth in image slides
-btnRight.addEventListener('click', nextSlide);
-btnLeft.addEventListener('click', prevSlide);
-
+slider();
 //////////////////////////////
 // Lecture 196: Selecting, Creating, and Deleting Elements
 // Selecting Elements
