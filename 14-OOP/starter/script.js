@@ -92,3 +92,43 @@ console.dir(
 ); // null - end of prototype chain
 
 console.dir(x => x + 1);
+
+// Lecture 224: ES6 Classes
+console.log('------ Lecture 224: ES6 Classes -------');
+// Class expression - in reality it's a function (in JS classes aresyntactic sugar)
+// const PersonCl = class {};
+
+// Class declaration
+class PersonCl {
+  constructor(firstName, birthYear) {
+    this.firstName = firstName;
+    this.birthYear = birthYear;
+  }
+
+  // Prototypal Inheritance: This method will be in the prototype of the object and not the object itself
+  // Summary: calcAge will be added in .prototype property of the PersonCl class
+  calcAge = function () {
+    console.log(2037 - this.brithYear);
+  };
+
+  greet() {
+    console.log(`Hey ${this.firstName}`);
+  }
+}
+
+const jessica = new PersonCl('Jessica', 1996);
+console.log(jessica);
+jessica.calcAge();
+
+console.log(jessica.__proto__ === PersonCl.prototype);
+
+// Same as initializing it inside class, above
+// PersonCl.prototype.greet = function () {
+//   console.log(`Hey ${this.firstName}`);
+// };
+jessica.greet();
+
+// Important Notes
+// 1. Classes are NOT hoisted - cannot be used before declaration
+// 2. Classes are first-class citizens: we can pass them into functions and return them from functions as they are functions themselves (remember --> syntactic sugar not like Java)
+// 3. Body of a class is always executed in 'use strict' modeg
