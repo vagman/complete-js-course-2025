@@ -107,6 +107,7 @@ class PersonCl {
 
   // Prototypal Inheritance: This method will be in the prototype of the object and not the object itself
   // Summary: calcAge will be added in .prototype property of the PersonCl class
+  // Instance method: will be transfered to all Class objects
   calcAge = function () {
     console.log(2037 - this.brithYear);
   };
@@ -130,7 +131,15 @@ class PersonCl {
   get fullName() {
     return this._fullName;
   }
+
+  // Static method
+  static hey() {
+    console.log('Hey there ! 👋');
+    console.log(this); // entire Person constructor function
+  }
 }
+// .this keyword points to the Class
+PersonCl.hey();
 
 const jessica = new PersonCl('Jessica Davis', 1996);
 console.log(jessica);
@@ -174,3 +183,14 @@ console.log(account.movements);
 
 account.age = 13;
 console.log(account);
+
+// Lecture 226: Static Methods
+// Note: Static method is a method chained on the Class constructor e.g. Number.parseFloat(12) on Number class. It cannot be used like this: 12.parseFloat()
+
+Person.hey = function () {
+  console.log('Hey there ! 👋');
+  console.log(this); // .this keyword point to the entire Person constructor function
+};
+
+Person.hey();
+// vagman.hey(); // vagman.hey is not a function, it's static to Person constructor
