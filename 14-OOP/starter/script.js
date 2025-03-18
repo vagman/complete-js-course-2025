@@ -100,8 +100,8 @@ console.log('------ Lecture 224: ES6 Classes -------');
 
 // Class declaration
 class PersonCl {
-  constructor(firstName, birthYear) {
-    this.firstName = firstName;
+  constructor(fullName, birthYear) {
+    this.fullName = fullName;
     this.birthYear = birthYear;
   }
 
@@ -112,13 +112,31 @@ class PersonCl {
   };
 
   greet() {
-    console.log(`Hey ${this.firstName}`);
+    console.log(`Hey ${this.fullName}`);
+  }
+
+  get age() {
+    return 2037 - this.birthYear;
+  }
+
+  // Set a property that already exists
+  set fullName(name) {
+    console.log(name);
+    // Convention to avoid same name with setter()
+    if (name.includes(' ')) this._fullName = name;
+    else alert(`${name} is not a full name`);
+  }
+
+  get fullName() {
+    return this._fullName;
   }
 }
 
-const jessica = new PersonCl('Jessica', 1996);
+const jessica = new PersonCl('Jessica Davis', 1996);
 console.log(jessica);
 jessica.calcAge();
+
+console.log('Jessica age:', jessica.age);
 
 console.log(jessica.__proto__ === PersonCl.prototype);
 
@@ -132,3 +150,27 @@ jessica.greet();
 // 1. Classes are NOT hoisted - cannot be used before declaration
 // 2. Classes are first-class citizens: we can pass them into functions and return them from functions as they are functions themselves (remember --> syntactic sugar not like Java)
 // 3. Body of a class is always executed in 'use strict' modeg
+
+const walter = new PersonCl('Walter White', 1965);
+
+// Lecture 225: Setter & Getters
+const account = {
+  owner: 'Jonas',
+  movements: [200, 530, 120, 300],
+
+  get latestMovement() {
+    return this.movements.slice(-1).pop();
+  },
+
+  set latestMovement(movement) {
+    this.movements.push(movement);
+  },
+};
+
+// Property not calling method !
+console.log(account.latestMovement);
+account.latestMovement = 212;
+console.log(account.movements);
+
+account.age = 13;
+console.log(account);
