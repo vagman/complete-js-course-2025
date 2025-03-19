@@ -108,9 +108,9 @@ class PersonCl {
   // Prototypal Inheritance: This method will be in the prototype of the object and not the object itself
   // Summary: calcAge will be added in .prototype property of the PersonCl class
   // Instance method: will be transfered to all Class objects
-  calcAge = function () {
+  calcAge() {
     console.log(2037 - this.brithYear);
-  };
+  }
 
   greet() {
     console.log(`Hey ${this.fullName}`);
@@ -194,3 +194,27 @@ Person.hey = function () {
 
 Person.hey();
 // vagman.hey(); // vagman.hey is not a function, it's static to Person constructor
+
+// Lecture 227: Object.create()
+const PersonPrototype = {
+  calcAge() {
+    console.log(2037 - this.birthYear);
+  },
+
+  init(firstName, birthYear) {
+    this.firstName = firstName;
+    this.birthYear = birthYear;
+  },
+};
+
+const steven = Object.create(PersonPrototype);
+console.log(steven);
+steven.name = 'Steven';
+steven.birthYear = 2002;
+steven.calcAge();
+
+console.log(steven.__proto__ === PersonPrototype);
+
+const sarah = Object.create(PersonPrototype);
+sarah.init('Sarah', 1979);
+sarah.calcAge();

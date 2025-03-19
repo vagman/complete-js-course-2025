@@ -1,18 +1,11 @@
-class PersonCl {
-  constructor(firstName, birthYear) {
-    this.firstName = firstName;
-    this.birthYear = birthYear;
-  }
-
-  calcAge = function () {
-    console.log(2037 - this.brithYear);
-  };
-}
-
-const jessica = new PersonCl('Jessica', 1996);
-
-PersonCl.prototype.greet = function () {
-  console.log(`Hey ${this.firstName}`);
+const PersonProto = {
+  calcAge() {
+    console.log(2037 - this.birthYear);
+  },
 };
 
-jessica.greet();
+const steven = Object.create(PersonProto);
+console.log(steven);
+steven.name = 'Steven';
+steven.birthYear = 2002;
+steven.calcAge();
