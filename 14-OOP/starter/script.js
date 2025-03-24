@@ -109,7 +109,7 @@ class PersonCl {
   // Summary: calcAge will be added in .prototype property of the PersonCl class
   // Instance method: will be transfered to all Class objects
   calcAge() {
-    console.log(2037 - this.brithYear);
+    console.log(2037 - this.birthYear);
   }
 
   greet() {
@@ -254,3 +254,60 @@ console.log(mike instanceof Object);
 
 Student.prototype.constructor = Student;
 console.dir(Student.prototype.constructor);
+
+// Lecture 231: Inheritance betweeen "Classes": ES6 Classes
+// extend heyword + super()
+class StudentCl extends PersonCl {
+  constructor(fullName, birthYear, course) {
+    // super() always needs to be called first !!!
+    super(fullName, birthYear);
+    this.course = course;
+  }
+
+  introduce() {
+    console.log(`My name is ${this.fullName} and I study ${this.course}.`);
+  }
+
+  calcAge() {
+    console.log(
+      `I'm ${
+        2037 - this.birthYear
+      } years old, but as a student I feel more like ${
+        2037 - this.birthYear + 10
+      }`
+    );
+  }
+}
+
+const martha = new StudentCl('Martha Jones', 2012, 'Computer Science');
+martha.introduce();
+martha.calcAge();
+
+// Lecture 232: Inheritance Between "Classes": Object.create
+const PersonProto = {
+  calcAge() {
+    console.log(2037 - this.birthYear);
+  },
+
+  init(firstName, birthYear) {
+    this.firstName = firstName;
+    this.birthYear = birthYear;
+  },
+};
+
+const steven1 = Object.create(PersonProto);
+
+const StudentProto = Object.create(PersonProto);
+StudentProto.init = function (firstName, birthYear, course) {
+  PersonProto.init.call(this, firstName, birthYear);
+  this.course = course;
+};
+
+StudentProto.introduce = function () {
+  console.log(`My name is ${this.firstName} and I study ${this.course}.`);
+};
+
+const jay = Object.create(StudentProto);
+jay.init('Jay', 2010, 'Computer Science');
+jay.introduce();
+jay.calcAge();
