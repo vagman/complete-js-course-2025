@@ -312,21 +312,34 @@ jay.init('Jay', 2010, 'Computer Science');
 jay.introduce();
 jay.calcAge();
 
-// Lecture: Another Class example
+// Lecture 233: Another Class example
+// Lecture 234: Encapsulation: Private Class Fields and Methods
+
+// 1) Public fields: it will be in all class instances (objects) but NOT on the prototype - will NOT get inherited. It's the same as adding properties inside the constructor
+// 2) Private fields
+// 3) Public methods
+// 4) Private methods
+// STATIC version of these 4
+
 class Account {
+  locale = navigator.language;
+  bank = 'Bankist';
+  // Private property
+  #movements = [];
+
   constructor(owner, currency, pin) {
     this.owner = owner;
     this.currency = currency;
     this.pin = pin;
-    this.movements = [];
-    this.locale = navigator.language;
-
+    // this.movements = [];
+    // this.bank = 'Bankist';
+    // this.locale = navigator.language;
     console.log(`Thanks for opening an account ${owner}`);
   }
 
   // Public Interface of our Object - API
   deposit(value) {
-    this.movements.push(value);
+    this.#movements.push(value);
   }
 
   withdraw(value) {
@@ -365,3 +378,9 @@ account1.approveLoan(1000); // Does not work - only request method can call it.
 
 console.log(account1);
 console.log(account1.pin);
+
+// Testing encapsultion for better security and privacy
+account1.movements = [];
+// It worked ^^ that's not good ! solution: #movements[]
+console.log(account1);
+console.log(account);
