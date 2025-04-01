@@ -33,10 +33,10 @@ class Workout {
     } ${this.date.getDate()}`;
   }
 
-  click() {
-    this.clickCounter++;
-    console.log(this.clickCounter);
-  }
+  // click() {
+  //   this.clickCounter++;
+  //   console.log(this.clickCounter);
+  // }
 }
 
 class Running extends Workout {
@@ -75,9 +75,9 @@ class Cycling extends Workout {
   }
 }
 // Experiment - Testing class behaviour
-const run1 = new Running([39, -12], 5.2, 24, 178);
-const cycling1 = new Cycling([39, -12], 27, 95, 523);
-console.log(run1, cycling1);
+// const run1 = new Running([39, -12], 5.2, 24, 178);
+// const cycling1 = new Cycling([39, -12], 27, 95, 523);
+// console.log(run1, cycling1);
 
 ////////////////////////////////////////////
 // APPLICATION ARCHITECTURE
@@ -127,6 +127,10 @@ class App {
 
     // Handling clicks on map
     this.#map.on('click', this._showForm.bind(this));
+
+    this.#workouts.forEach(workout => {
+      this._renderWorkoutMarker(workout);
+    });
   }
 
   _showForm(mapE) {
@@ -308,7 +312,7 @@ class App {
     });
 
     // using the publicm interface
-    workout.click();
+    // workout.click();
   }
 
   // Local Storage is to be used with small amounts of data
@@ -326,7 +330,15 @@ class App {
     if (!data) return;
 
     this.#workouts = data;
+
     this.#workouts.forEach(workout => this._renderWorkout(workout));
+  }
+
+  reset() {
+    // Clear all 'workout" objects from Local Storage
+    localStorage.removeItem('workouts');
+    // location objects contains a lot methods and properties of the browser. Here we just reload the page.
+    location.reload();
   }
 }
 
