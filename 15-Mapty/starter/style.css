@@ -90,6 +90,27 @@ a:visited {
   grid-column: 1 / -1;
 }
 
+.workout__actions {
+  grid-column: -1; /* Place in the 4th column */
+  grid-row: 1; /* First row */
+  justify-self: end;
+  width: 20px;
+  height: 20px;
+}
+
+.workout__delete--btn {
+  background-image: url(delete.png);
+  background-color: transparent;
+  width: 100%; /* Match parent div size */
+  height: 100%;
+  display: block; /* Ensures it takes up space */
+  background-size: contain; /* Ensures the image fits */
+  background-repeat: no-repeat;
+  background-position: center;
+  border: none; /* Remove default button border */
+  cursor: pointer;
+}
+
 .workout__details {
   display: flex;
   align-items: baseline;
