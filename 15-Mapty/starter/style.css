@@ -207,8 +207,8 @@ a:visited {
 }
 
 .copyright {
-  margin-top: auto;
-  font-size: 1.3rem;
+  margin-top: 2rem;
+  font-size: 1.7rem !important;
   text-align: center;
   color: var(--color-light--1);
 }

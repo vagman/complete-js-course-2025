@@ -29,8 +29,7 @@
   </head>
   <body>
     <div class="sidebar">
-      <img sworkout__delete--btn'src="logo.png" alt="Logo" class="logo" />
-
+      <img src="logo.png" alt="Logo" class="logo" />
       <ul class="workouts">
         <form class="form hidden">
           <div class="form__row">
@@ -118,14 +117,16 @@
       </ul>
 
       <p class="copyright">
-        &copy; Copyright by
-        <a
-          class="twitter-link"
-          target="_blank"
-          href="https://twitter.com/jonasschmedtman"
-          >Jonas Schmedtmann</a
-        >. Use for learning or your portfolio. Don't use to teach. Don't claim
-        as your own.
+        <script>
+          const date = new Date();
+
+          document
+            .querySelector('.copyright')
+            .insertAdjacentHTML(
+              'beforeend',
+              `© Copyright ${date.getFullYear()} <a class="twitter-link" target="_blank" href="https://twitter.com/jonasschmedtman">Jonas Schmedtmann<a/>. Use for learning or your portfolio. Don't use to teach. Don't claim as your own. Small additions with large amounts of ☕️ by <a class="twitter-link" target="_blank" href="https://github.com/vagman">Vaggelis Manousakis</a>`
+            );
+        </script>
       </p>
     </div>
 
