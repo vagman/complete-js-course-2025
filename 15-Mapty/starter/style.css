@@ -67,12 +67,12 @@ a:visited {
 }
 
 .workout {
+  overflow: visible !important;
   background-color: var(--color-dark--2);
   border-radius: 5px;
   padding: 1.5rem 2.25rem;
   margin-bottom: 1.75rem;
   cursor: pointer;
-
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   gap: 0.75rem 1.5rem;
@@ -91,24 +91,25 @@ a:visited {
 }
 
 .workout__actions {
+  position: relative; /* Needed for absolute positioning of tooltip */
+  display: inline-block;
   grid-column: -1; /* Place in the 4th column */
   grid-row: 1; /* First row */
-  transition: transform 150ms ease-in-out;
 }
 
-.workout__actions:hover {
-  transform: rotate(30deg);
+/* Show the tooltip when hovering over the button */
+.workout__actions:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
 }
 
-.workout__actions::after {
-  transition: transform 150ms ease-in-out;
-}
-
-.workout__actions:hover::after {
-  transform: rotate(-30deg);
+.workout__delete--btn:hover {
+  transform: rotate(45deg);
 }
 
 .workout__delete--btn {
+  transition: transform 200ms ease-in-out;
+  position: relative;
   background-image: url(delete.png);
   background-color: inherit;
   width: 100%; /* Match parent div size */
@@ -121,8 +122,29 @@ a:visited {
   outline: inherit;
   font: inherit;
   cursor: pointer;
-  border: none; /* Ensure no border is adding shadow */
-  box-shadow: none; /* Remove any box shadow */
+  border: none;
+}
+
+/* Tooltip style */
+.tooltip {
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 5px;
+  padding: 5px;
+  position: absolute;
+  bottom: 125%; /* Position above the button */
+  left: 50%;
+  margin-left: -60px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+
+.tooltip:hover {
+  opacity: 1;
+  visibility: visible;
 }
 
 .workout__details {

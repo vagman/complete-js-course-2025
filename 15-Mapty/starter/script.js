@@ -254,9 +254,8 @@ class App {
           <li class="workout workout--${workout.type}" data-id="${workout.id}">
             <h2 class="workout__title">${workout.description}</h2>
             <div class="workout__actions">
-              <button
-                  class="workout__delete--btn"
-                />
+              <button class="workout__delete--btn"></button>
+              <div class="tooltip">This is a tooltip!</div>
             </div>
             <div class="workout__details">
               <span class="workout__icon">${
