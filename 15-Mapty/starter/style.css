@@ -93,24 +93,29 @@ a:visited {
 .workout__actions {
   grid-column: -1; /* Place in the 4th column */
   grid-row: 1; /* First row */
-  justify-self: end;
-  /* width: 20px;
-  height: 20px; */
-  border: 2px solid white;
+  /* border: 2px solid transparent; */
+}
+
+.workout__actions:hover {
+  transform: rotate(30deg);
+  transition-duration: 600ms;
 }
 
 .workout__delete--btn {
   background-image: url(delete.png);
-  background-color: transparent;
+  background-color: inherit;
   width: 100%; /* Match parent div size */
   height: 100%;
   display: block; /* Ensures it takes up space */
   background-size: contain; /* Ensures the image fits */
   background-repeat: no-repeat;
   background-position: center;
-  padding: 10px;
-
+  padding: 12px;
+  outline: inherit;
+  font: inherit;
   cursor: pointer;
+  border: none; /* Ensure no border is adding shadow */
+  box-shadow: none; /* Remove any box shadow */
 }
 
 .workout__details {

@@ -357,18 +357,19 @@ class App {
       workout => workout.id === workoutId
     );
     if (workoutIndex === -1) return; // If workout is not found, exit
+    if (confirm('Are you sure you want to delete this workout ?')) {
+      // 1. remove from list
+      workoutElement.remove();
+      // 2. remove from array
+      this.#workouts.splice(workoutIndex, 1);
+      // 3. remove from map
+      this.#markers[workoutIndex].remove();
+      // 4. remove from marker array
+      this.#markers.splice(workoutIndex, 1);
 
-    // 1. remove from list
-    workoutElement.remove();
-    // 2. remove from array
-    this.#workouts.splice(workoutIndex, 1);
-    // 3. remove from map
-    this.#markers[workoutIndex].remove();
-    // 4. remove from marker array
-    this.#markers.splice(workoutIndex, 1);
-
-    // Update local storage
-    this._setLocalStorage();
+      // Update local storage
+      this._setLocalStorage();
+    }
   }
 
   _getWorkoutId(e) {
