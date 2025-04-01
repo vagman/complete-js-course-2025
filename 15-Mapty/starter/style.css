@@ -93,12 +93,19 @@ a:visited {
 .workout__actions {
   grid-column: -1; /* Place in the 4th column */
   grid-row: 1; /* First row */
-  /* border: 2px solid transparent; */
+  transition: transform 150ms ease-in-out;
 }
 
 .workout__actions:hover {
   transform: rotate(30deg);
-  transition-duration: 600ms;
+}
+
+.workout__actions::after {
+  transition: transform 150ms ease-in-out;
+}
+
+.workout__actions:hover::after {
+  transform: rotate(-30deg);
 }
 
 .workout__delete--btn {
