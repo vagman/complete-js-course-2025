@@ -88,7 +88,13 @@ class App {
   #workouts = [];
 
   constructor() {
+    // Get user's position
     this._getPosition();
+
+    // Get data from local storage
+    this._getLocalStorage();
+
+    // Attach event handlers
     form.addEventListener('submit', this._newWorkout.bind(this));
     inputType.addEventListener('change', this._toggleElevationField);
     containerWorkouts.addEventListener('click', this._moveToPopup.bind(this));
@@ -202,6 +208,9 @@ class App {
 
     // TODO: hide form & clear input fields
     this._hideForm();
+
+    // Set local storage to all workouts
+    this._setLocalStorage();
   }
 
   _renderWorkoutMarker(workout) {
@@ -300,6 +309,24 @@ class App {
 
     // using the publicm interface
     workout.click();
+  }
+
+  // Local Storage is to be used with small amounts of data
+  _setLocalStorage() {
+    // Convert JSON to string and then save them in local storage
+    localStorage.setItem('workouts', JSON.stringify(this.#workouts));
+  }
+
+  _getLocalStorage() {
+    const data = JSON.parse(localStorage.getItem('workouts'));
+    // console.log(typeof data);
+    // console.log(data);
+
+    // if there is no data (data === undefined)...
+    if (!data) return;
+
+    this.#workouts = data;
+    this.#workouts.forEach(workout => this._renderWorkout(workout));
   }
 }
 
