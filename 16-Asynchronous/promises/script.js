@@ -11,15 +11,19 @@ const renderError = function (errorMessage) {
 const renderCountry = function (data, className) {
   const html = `
     <article class="country ${className}">
-      <img class="country__img" src="${data.flag}" />
+      <img class="country__img" src="${data.flags.png}" />
       <div class="country__data">
-        <h3 class="country__name">${data.name}</h3>
+        <h3 class="country__name">${data.name.common}</h3>
         <h4 class="country__region">${data.region}</h4>
         <p class="country__row"><span>👫</span>${(
           +data.population / 1000000
-        ).toFixed(1)}M people</p>
-        <p class="country__row"><span>🗣️</span>${data.languages[0].name}</p>
-        <p class="country__row"><span>💰</span>${data.currencies[0].name}</p>
+        ).toFixed()}M people</p>
+        <p class="country__row"><span>🗣️</span>${
+          Object.values(data.languages)[0]
+        }</p>
+        <p class="country__row"><span>💰</span>${
+          Object.values(data.currencies)[0].name
+        }</p>
       </div>
     </article>
     `;
@@ -29,6 +33,8 @@ const renderCountry = function (data, className) {
 
 // NEW COUNTRIES API URL (use instead of the URL shown in videos):
 // https://restcountries.com/v2/name/portugal
+
+// 2025 Working: v.3.1 RestCountries API: https://restcountries.com/v3.1/name/ & https://restcountries.com/v3.1/alpha/
 
 // NEW REVERSE GEOCODING API URL (use instead of the URL shown in videos):
 // https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}
@@ -42,7 +48,7 @@ const renderCountry = function (data, className) {
 // request.send();
 
 // Fetch API - new way
-const request = fetch(`https://restcountries.com/v2/name/greece`);
+// const request = fetch(`https://restcountries.com/v3.1/name/greece`);
 // console.log(request);
 
 // const getCountryData = function (country) {
@@ -59,24 +65,34 @@ const request = fetch(`https://restcountries.com/v2/name/greece`);
 //   // PromiseState === 'fulfilled'
 // };
 
-// Highly simplified version without console.logs...
-const getCountryData = function (country) {
-  // Country 1
-  fetch(`https://restcountries.com/v2/name/${country}`)
-    .then(response => response.json())
-    .then(data => {
-      renderCountry(data[0]);
-      const neighbour = data[0].borders[0];
+const getJSON = function (url, errorMessage = 'Something went wrong') {
+  return fetch(url).then(response => {
+    if (!response.ok) throw new Error(`${errorMessage}: (${response.status})`);
 
-      if (!neighbour) return;
+    return response.json();
+  });
+};
+
+// Highly simplified version without console.logs...
+const getCountryData = country => {
+  // Country 1
+  getJSON(
+    `https://restcountries.com/v3.1/name/${country}`,
+    'Country not found.'
+  )
+    .then(data => {
+      renderCountry(...data);
+      const neighbourCode = data[0].borders ? data[0].borders[0] : undefined;
+
+      if (!neighbourCode) throw new Error('No neigbour found');
 
       // Country 2 - flat chain of promises
-      return fetch(`https://restcountries.com/v2/alpha/${neighbour}`);
+      return getJSON(
+        `https://restcountries.com/v3.1/alpha/${neighbourCode}`,
+        'No neighbours found.'
+      );
     })
-    .then(response =>
-      // Fulfilled promise
-      response.json().then(data => renderCountry(data, 'neighbour'))
-    )
+    .then(data => renderCountry(...data, 'neighbour'))
     .catch(
       // Rejected - Catching/Handling the not internet connection error
       error => {
@@ -95,10 +111,10 @@ const getCountryData = function (country) {
 
 // Lecture 264: Handle Rejected Promises
 // fetch() Promise rejection === No Internet Connection
-btn.addEventListener('click', () => getCountryData('greece'));
+btn.addEventListener('click', () => getCountryData('australia'));
 
 // Web tool --> Network ---> Check disable cache + select Offiline
 // GET https://restcountries.com/v2/name/greece net::ERR_INTERNET_DISCONNECTED
 
 // Country that does not exist: Something went wrong 💥💥💥 Cannot read properties of undefined (reading 'flag'). Try again!
-getCountryData('asdasd');
+// getCountryData('asdasd');
