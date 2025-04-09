@@ -118,3 +118,68 @@ btn.addEventListener('click', () => getCountryData('australia'));
 
 // Country that does not exist: Something went wrong 💥💥💥 Cannot read properties of undefined (reading 'flag'). Try again!
 // getCountryData('asdasd');
+
+// Lecture 271: Building a Simple Promise
+// Only one arguement - executer function()
+const lotteryPromise = new Promise(function (resolve, reject) {
+  console.log('Lottery draw is happening 🔮');
+  setTimeout(function () {
+    // 50% of winning the lottery
+    if (Math.random() >= 0.5) {
+      // Set promise as fullfiled / resolved
+      resolve('You won !💰');
+    } else {
+      // Set promise as rejected
+      reject(new Error('You lost your money 💩'));
+    }
+  }, 2000);
+});
+
+// Consuming the promise
+lotteryPromise
+  .then(resolvedValue => {
+    console.log(resolvedValue);
+  })
+  .catch(error => console.log(error));
+
+// Promisifying setTimeout Exercise: convert the callback based asynchronous behaviour to promise based.
+const wait = seconds => {
+  return new Promise(resolve => {
+    setTimeout(resolve, seconds * 1000);
+  });
+};
+
+// From Lecture: Callback Hell
+//
+// setTimeout(() => {
+//   console.log('1 second passed.');
+//   setTimeout(() => {
+//     console.log('2 seconds passed.');
+//     setTimeout(() => {
+//       console.log('3 seconds passed.');
+//       setTimeout(() => {
+//         console.log('4 seconds passed.');
+//       }, 1000);
+//     }, 1000);
+//   }, 1000);
+// }, 1000);
+
+// Promisify the codeblock above
+wait(1)
+  .then(() => {
+    console.log('1 second passed.');
+    return wait(1);
+  })
+  .then(() => {
+    console.log('2 seconds passed.');
+    return wait(1);
+  })
+  .then(() => {
+    console.log('3 seconds passed.');
+    return wait(1);
+  })
+  .then(() => console.log('4 seconds passed.'));
+
+// Promise wil be resolved immedietly with resolve()
+Promise.resolve('abc').then(x => console.log(x));
+Promise.resolve(new Error('Problem!')).catch(x => console.error(x));
