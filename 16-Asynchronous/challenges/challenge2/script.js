@@ -20,3 +20,12 @@ TEST DATA: Images in the img folder. Test the error handler by passing a wrong i
 
 GOOD LUCK 😀
 */
+
+const createImage = function (imgPath) {
+  return new Promise((resolve, reject) => {
+    document.createElement('img').src = imgPath;
+  });
+};
+
+createImage('img/img-1.jpg');
+// TODO: Img isn't loading..
