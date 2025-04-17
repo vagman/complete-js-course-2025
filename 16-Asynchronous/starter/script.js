@@ -89,3 +89,16 @@ setTimeout(() => {
     }, 1000);
   }, 1000);
 }, 1000);
+
+// Lecture 274: Consuming Promises with Async/Await
+const whereAmI = async function (country) {
+  const res = await fetch(`https://restcountries.com/v3.1/name/${country}`);
+  console.log(res);
+
+  // Async/Await are in reality promises
+  // Code below does exactly the same as the code above:
+  // fetch(`https://restcountries.com/v3.1/name/${country}`).then(res => console.log(res));
+};
+
+whereAmI('greece');
+console.log('FIRST');
