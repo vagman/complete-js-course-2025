@@ -75,7 +75,7 @@ const whereAmI = function () {
 
       return response.json();
     })
-    .then(data => renderCountry(data[0]))
+    .then(data => Country(data[0]))
     .catch(error => console.error('ERROR:', error));
 };
 

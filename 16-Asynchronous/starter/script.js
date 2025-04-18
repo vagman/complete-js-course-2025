@@ -16,19 +16,28 @@ const countriesContainer = document.querySelector('.countries');
 const renderCountry = function (data, className) {
   const html = `
     <article class="country ${className}">
-      <img class="country__img" src="${data.flag}" />
+      <img class="country__img" src="${data.flags.png}" />
       <div class="country__data">
-        <h3 class="country__name">${data.name}</h3>
+        <h3 class="country__name">${data.name.common}</h3>
         <h4 class="country__region">${data.region}</h4>
         <p class="country__row"><span>👫</span>${(
           +data.population / 1000000
-        ).toFixed(1)}M people</p>
-        <p class="country__row"><span>🗣️</span>${data.languages[0].name}</p>
-        <p class="country__row"><span>💰</span>${data.currencies[0].name}</p>
+        ).toFixed()}M people</p>
+        <p class="country__row"><span>🗣️</span>${
+          Object.values(data.languages)[0]
+        }</p>
+        <p class="country__row"><span>💰</span>${
+          Object.values(data.currencies)[0].name
+        }</p>
       </div>
     </article>
     `;
   countriesContainer.insertAdjacentHTML('beforeend', html);
+  countriesContainer.style.opacity = 1;
+};
+
+const renderError = function (errorMessage) {
+  countriesContainer.insertAdjacentText('beforeend', errorMessage);
   countriesContainer.style.opacity = 1;
 };
 
@@ -48,7 +57,7 @@ const getCountryAndNeighbour = function (country) {
     const [data] = JSON.parse(this.responseText);
 
     // Render country 1
-    renderCountry(data);
+    // renderCountry(data);
 
     // Get Neighbour country 2
     const neighbouringCountryCode = data.borders?.[0];
@@ -65,10 +74,10 @@ const getCountryAndNeighbour = function (country) {
 
     request2.addEventListener('load', function () {
       const data2 = JSON.parse(this.responseText);
-      console.log(data2);
+      // console.log(data2);
 
       // Render country 1
-      renderCountry(data2, 'neighbour');
+      // renderCountry(data2, 'neighbour');
     });
   });
 };
@@ -78,27 +87,84 @@ getCountryAndNeighbour('portugal');
 // Callback hell: messy, non-maintenable code
 // Solution to callback hell => Promises
 setTimeout(() => {
-  console.log('1 second passed.');
+  // console.log('1 second passed.');
   setTimeout(() => {
-    console.log('2 seconds passed.');
+    // console.log('2 seconds passed.');
     setTimeout(() => {
-      console.log('3 seconds passed.');
+      // console.log('3 seconds passed.');
       setTimeout(() => {
-        console.log('4 seconds passed.');
+        // console.log('4 seconds passed.');
       }, 1000);
     }, 1000);
   }, 1000);
 }, 1000);
 
 // Lecture 274: Consuming Promises with Async/Await
-const whereAmI = async function (country) {
-  const res = await fetch(`https://restcountries.com/v3.1/name/${country}`);
-  console.log(res);
 
-  // Async/Await are in reality promises
-  // Code below does exactly the same as the code above:
-  // fetch(`https://restcountries.com/v3.1/name/${country}`).then(res => console.log(res));
+const getPosition = () => {
+  return new Promise((resolve, reject) => {
+    navigator.geolocation.getCurrentPosition(
+      position => resolve(position),
+      error => {
+        let msg = 'Something went wrong 💩';
+        if (error.code === 1)
+          msg = '🛑 Permission denied. Please allow location access.';
+        else if (error.code === 2)
+          msg = '📡 Position unavailable. Please try again later.';
+        else if (error.code === 3)
+          msg = '⏰ Timeout while trying to get your location.';
+
+        reject(new Error(msg)); // Reject with a meaningful message
+      }
+    );
+  });
+};
+// reverse geiolocaton API
+
+// Async/Await are in reality promises
+// Code below does exactly the same as the code above:
+// fetch(`https://restcountries.com/v3.1/name/${country}`).then(res => console.log(res));
+
+const whereAmI = async function () {
+  try {
+    const position = await getPosition();
+    const { latitude, longitude } = position.coords;
+
+    // Here we take the X,Y and call reserve geocoding
+    const responseReverseGeocoding = await fetch(
+      `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}`
+    );
+    console.log(responseReverseGeocoding);
+
+    if (!responseReverseGeocoding.ok)
+      throw new Error('Problem fetching location data');
+
+    const dataReverseGeocoding = await responseReverseGeocoding.json();
+    console.log(dataReverseGeocoding);
+
+    const response = await fetch(
+      `https://restcountries.com/v3.1/name/${dataReverseGeocoding.countryName}`
+    );
+    // console.log(response.json());
+
+    const [data] = await response.json();
+    // console.log(data);
+    renderCountry(data);
+  } catch (error) {
+    console.error('CUSTOM ERROR MESSAGE:\n\n', error);
+    renderError('Something went wrong 💩');
+  }
 };
 
-whereAmI('greece');
-console.log('FIRST');
+whereAmI();
+
+// console.log('FIRST');
+
+// Lecture 275: Error handling with try{}...catch ()
+// try {
+//   let y = 1;
+//   const x = 2;
+//   x = 3;
+// } catch (error) {
+//   console.error(error);
+// }
