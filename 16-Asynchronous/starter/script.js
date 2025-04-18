@@ -100,7 +100,6 @@ setTimeout(() => {
 }, 1000);
 
 // Lecture 274: Consuming Promises with Async/Await
-
 const getPosition = () => {
   return new Promise((resolve, reject) => {
     navigator.geolocation.getCurrentPosition(
@@ -127,21 +126,22 @@ const getPosition = () => {
 
 const whereAmI = async function () {
   try {
+    // Geolocation
     const position = await getPosition();
     const { latitude, longitude } = position.coords;
 
-    // Here we take the X,Y and call reserve geocoding
+    // Reserve Geocoding
     const responseReverseGeocoding = await fetch(
       `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}`
     );
-    console.log(responseReverseGeocoding);
-
+    // console.log(responseReverseGeocoding);
     if (!responseReverseGeocoding.ok)
       throw new Error('Problem fetching location data');
 
     const dataReverseGeocoding = await responseReverseGeocoding.json();
-    console.log(dataReverseGeocoding);
+    // console.log(dataReverseGeocoding);
 
+    // Country Data
     const response = await fetch(
       `https://restcountries.com/v3.1/name/${dataReverseGeocoding.countryName}`
     );
@@ -150,13 +150,17 @@ const whereAmI = async function () {
     const [data] = await response.json();
     // console.log(data);
     renderCountry(data);
+    return `You are in ${dataReverseGeocoding.city}, ${dataReverseGeocoding.countryName}`;
   } catch (error) {
-    console.error('CUSTOM ERROR MESSAGE:\n\n', error);
+    console.error(`CUSTOM ERROR MESSAGE:\n\n', ${error}💥`);
     renderError('Something went wrong 💩');
+
+    // Rejected promise returned from async function
+    throw error;
   }
 };
 
-whereAmI();
+// whereAmI();
 
 // console.log('FIRST');
 
@@ -168,3 +172,14 @@ whereAmI();
 // } catch (error) {
 //   console.error(error);
 // }
+
+// Lecture 276: Returning values from Async functions
+console.log('1. Will get potiton');
+
+// Async functions always return a promise
+// const city = whereAmI();
+// console.log(city);
+whereAmI()
+  .then(city => console.log(`2: ${city}`))
+  .catch(err => console.error(`2: ${err.message} 💥`))
+  .finally(() => console.log(`3. Finished getting location `));
