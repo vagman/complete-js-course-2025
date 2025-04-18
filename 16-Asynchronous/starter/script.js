@@ -13,6 +13,14 @@ const countriesContainer = document.querySelector('.countries');
 // Lecutre 258: AJAX Call : XMLHttpRequest
 // updated URL: https://countries-api-836d.onrender.com/countries/
 
+const getJSON = function (url, errorMessage = 'Something went wrong') {
+  return fetch(url).then(response => {
+    if (!response.ok) throw new Error(`${errorMessage}: (${response.status})`);
+
+    return response.json();
+  });
+};
+
 const renderCountry = function (data, className) {
   const html = `
     <article class="country ${className}">
@@ -149,7 +157,7 @@ const whereAmI = async function () {
 
     const [data] = await response.json();
     // console.log(data);
-    renderCountry(data);
+    // renderCountry(data);
     return `You are in ${dataReverseGeocoding.city}, ${dataReverseGeocoding.countryName}`;
   } catch (error) {
     console.error(`CUSTOM ERROR MESSAGE:\n\n', ${error}💥`);
@@ -174,23 +182,44 @@ const whereAmI = async function () {
 // }
 
 // Lecture 276: Returning values from Async functions
-console.log('1. Will get potiton');
+// console.log('1. Will get position');
 
 // Async functions always return a promise
 // const city = whereAmI();
 // console.log(city);
-whereAmI()
-  .then(city => console.log(`2: ${city}`))
-  .catch(err => console.error(`2: ${err.message} 💥`))
-  .finally(() => console.log('3. Finished getting location'));
+// whereAmI()
+//   .then(city => console.log(`2: ${city}`))
+//   .catch(err => console.error(`2: ${err.message} 💥`))
+//   .finally(() => console.log('3. Finished getting location'));
 
 // Async IIFIE - Challenge: convert whereAmI from above to async
 (async function () {
   try {
     const city = await whereAmI();
-    console.log(`2: ${city}`);
+    // console.log(`2: ${city}`);
   } catch (error) {
     console.error(`2: ${err.message} 💥`);
   }
-  console.log('3. Finished getting location');
+  // console.log('3. Finished getting location');
 })();
+
+// Lecture 277: Running Promises in Parallel
+const get3Countries = async function (c1, c2, c3) {
+  try {
+    // const [data1] = await getJSON(`https://restcountries.com/v3.1/name/${c1}`);
+    // const [data2] = await getJSON(`https://restcountries.com/v3.1/name/${c2}`);
+    // const [data3] = await getJSON(`https://restcountries.com/v3.1/name/${c3}`);
+
+    // NOTE: In Promise.all() if one promise rejects then all the promises are rejected (short-circuiting) !
+    const data = await Promise.all([
+      getJSON(`https://restcountries.com/v3.1/name/${c1}`),
+      getJSON(`https://restcountries.com/v3.1/name/${c2}`),
+      getJSON(`https://restcountries.com/v3.1/name/${c3}`),
+    ]);
+    console.log(data.flatMap(country => country[0].capital));
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+get3Countries('greece', 'poland', 'portugal');
