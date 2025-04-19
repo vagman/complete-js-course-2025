@@ -1,7 +1,6 @@
 'use strict';
 
 // Lecture 278: Pormise combinators: race, allSettled, any
-
 const getJSON = function (url, errorMessage = 'Something went wrong') {
   return fetch(url).then(response => {
     if (!response.ok) throw new Error(`${errorMessage}: (${response.status})`);
