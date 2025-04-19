@@ -88,7 +88,6 @@ const loadAll = async function (imgArr) {
 
     // 5 + Removing loading spinner
     document.body.removeChild(spinner);
-    document.body.removeChild(heading);
     imgElements.forEach(image => image.classList.add('parallel'));
   } catch (error) {
     console.error(`Error: ${error} 💥`);
