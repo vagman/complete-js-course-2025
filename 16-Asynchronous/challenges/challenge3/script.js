@@ -37,55 +37,26 @@ const createImage = async function (imgPath) {
   });
 };
 
-// const loadNPause = async function () {
-//   try {
-//     // Load image #1
-//     let currentImgAsync = await createImage('img/img-1.jpg');
-//     console.log(`Image #1 loaded!`);
-//     await wait(2);
-//     currentImgAsync.style.display = 'none';
-//     console.log('Image #1 hidden');
+const loadNPause = async function () {
+  try {
+    // Load image #1
+    let currentImgAsync = await createImage('img/img-1.jpg');
+    console.log(`Image #1 loaded!`);
+    await wait(2);
+    currentImgAsync.style.display = 'none';
+    console.log('Image #1 hidden');
 
-//     // Load image #2
-//     currentImgAsync = await createImage('img/img-2.jpg');
-//     console.log(`Image #2 loaded!`);
-//     await wait(2);
-//     console.log('Image #2 hidden');
-//     currentImgAsync.style.display = 'none';
-//   } catch (error) {
-//     console.error(error);
-//   }
-// };
+    // Load image #2
+    currentImgAsync = await createImage('img/img-2.jpg');
+    console.log(`Image #2 loaded!`);
+    await wait(2);
+    console.log('Image #2 hidden');
+    currentImgAsync.style.display = 'none';
+  } catch (error) {
+    console.error(error);
+  }
+};
 // loadNPause();
-
-// let currentImg;
-// createImage('img/img-1.jpg')
-//   .then(img => {
-//     // 2.1 Consuming promise
-//     currentImg = img;
-//     console.log(`Image #1 loaded!`);
-
-//     // Pause execution for 2 sec
-//     return wait(2);
-//   })
-//   .then(() => {
-//     // 2.2, 2.3 wait() doesn't return anything so no arguements to be used here
-//     currentImg.style.display = 'none';
-//     console.log('Image #1 hidden');
-//     return createImage('img/img-2.jpg');
-//   })
-//   .then(img => {
-//     // 2.3 Consuming new promise
-//     currentImg = img;
-//     console.log(`Image #2 loaded!`);
-//     return wait(2);
-//   })
-//   .then(() => {
-//     // 2.4 Hide image #2
-//     currentImg.style.display = 'none';
-//     console.log('Image #2 hidden');
-//   })
-//   .catch(error => console.error(error));
 
 /*
 PART 2
@@ -107,7 +78,7 @@ const loadAll = async function (imgArr) {
     document.body.appendChild(spinner);
 
     // 2
-    const imgs = imgArr.map(image => createImage(image));
+    const imgs = imgArr.map(async image => await createImage(image));
 
     // 3
     console.log(imgs);
