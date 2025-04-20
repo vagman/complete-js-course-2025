@@ -31,3 +31,4 @@ add('bread', 5);
 add('apples', 4);
 
 console.log(cart);
+// Imports are not copies of the exports. They are a live connection: pointing in the same place in memory.
