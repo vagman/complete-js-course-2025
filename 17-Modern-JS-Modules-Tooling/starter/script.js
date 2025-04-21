@@ -97,13 +97,32 @@ ShoppingCart2.addToCart('pizza', 2);
 // Lecture 287: CommonJS Modules
 // The following code won't work in the browser but it would work in Node.js
 // Exporting...
-exports.addToCart = function (product, quantity) {
-  cart.push({ product, quantity });
-  console.log(
-    `${quantity} ${product} added to cart (shipping cost is ${shippingCost})`
-  );
-};
+// exports.addToCart = function (product, quantity) {
+//   cart.push({ product, quantity });
+//   console.log(
+//     `${quantity} ${product} added to cart (shipping cost is ${shippingCost})`
+//   );
+// };
 
 // Importing...
-const { addToCart } = require('./shoppingCart.js');
+// const { addToCart } = require('./shoppingCart.js');
 // "exports", "require", "module.exports" keywords are recopgnized by Node
+
+// Lecture 289. introduction to NPM
+import cloneDeep from './node_modules/lodash-es/cloneDeep.js';
+const state = {
+  cart: [
+    { productr: 'bread', quantity: 5 },
+    { product: 'pizza', quantity: 5 },
+  ],
+  user: { loggedIn: true },
+};
+
+const stateClone = Object.assign({}, state);
+const stateDeepClone = cloneDeep(state);
+
+console.log(stateClone);
+state.user.loggedIn = false;
+console.log(stateClone);
+
+console.log('DeepClone: ', stateDeepClone);

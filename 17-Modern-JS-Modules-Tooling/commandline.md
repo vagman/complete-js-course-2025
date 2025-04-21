@@ -15,4 +15,5 @@
 * **mv file_name   location_which_should_be_moved**: terminate the live-server
 * **rmdir directory_name**: remove specified directory - must be empty for MacOS
 * **rm -r directory_name**: -recursive option for deletion of a directory which will delete all the contents too
-
+* **npm i module_name**: install a 3rd-party Node module to your local project
+* **npm install**: installs ALL 3rd-party Node modules that are specified in the package.json file as dependencies of the project
