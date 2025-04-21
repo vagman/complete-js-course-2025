@@ -25,10 +25,85 @@ console.log('Importing module');
 //   totalPrice as price,
 //   quantity,
 // } from './shoppingCart.js';
-import add, { cart } from './shoppingCart.js';
+import add, { cart, quantity } from './shoppingCart.js';
 add('pizza', 2);
 add('bread', 5);
 add('apples', 4);
 
 console.log(cart);
 // Imports are not copies of the exports. They are a live connection: pointing in the same place in memory.
+
+// Lecture 285: Top-level await (ES2022)
+// JSON placeholder API with fake data: https://jsonplaceholder.typicode.com/
+// console.log('Start fetching');
+// const result = await fetch('https://jsonplaceholder.typicode.com/posts');
+// console.log(result);
+// const data = await result.json();
+// console.log(data);
+// console.log('Something');
+// The method above which is using top-level await is blocking the entire module execution
+
+const getLastPost = async function () {
+  const result = await fetch('https://jsonplaceholder.typicode.com/posts');
+  const data = await result.json();
+  // console.log(data);
+
+  // return data[data.length - 1];
+  return { title: data.at(-1).title, text: data.at(-1) };
+};
+
+const lastPost = getLastPost();
+console.log(lastPost);
+
+// Not very clean solution: use regular promise then()
+// lastPost.then(lastPost => console.log(lastPost));
+
+const lastPost1 = await getLastPost();
+console.log(lastPost1);
+
+// Lecture 286: The Module Pattern
+// Step 1. Create an IIFE (Immidietly Invoked Function Expression)
+const ShoppingCart2 = (function () {
+  const cart = [];
+  const shippingCost = 10;
+  const totalPrice = 237;
+  const totalQuantity = 23;
+
+  const addToCart = function (product, quantity) {
+    cart.push({ product, quantity });
+    console.log(
+      `${quantity} ${product} added to cart (shipping cost is ${shippingCost})`
+    );
+  };
+
+  const orderStock = function (product, quantity) {
+    cart.push({ product, quantity });
+    console.log(`${quantity} ${product} ordered from supplier.`);
+  };
+
+  return {
+    addToCart,
+    cart,
+    totalPrice,
+    totalQuantity,
+  };
+})();
+
+ShoppingCart2.addToCart('apple', 4);
+ShoppingCart2.addToCart('pizza', 2);
+// console.log(ShoppingCart2);
+// console.log(ShoppingCart2.shippingCost);
+
+// Lecture 287: CommonJS Modules
+// The following code won't work in the browser but it would work in Node.js
+// Exporting...
+exports.addToCart = function (product, quantity) {
+  cart.push({ product, quantity });
+  console.log(
+    `${quantity} ${product} added to cart (shipping cost is ${shippingCost})`
+  );
+};
+
+// Importing...
+const { addToCart } = require('./shoppingCart.js');
+// "exports", "require", "module.exports" keywords are recopgnized by Node
