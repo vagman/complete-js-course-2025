@@ -126,3 +126,7 @@ state.user.loggedIn = false;
 console.log(stateClone);
 
 console.log('DeepClone: ', stateDeepClone);
+
+// Lecture 290: Bundling With Parcel and NPM Scripts
+// cd to currect working directory and then run: npm i parcel --save-dev
+// then run: npx parcel index.html (or the second option is to use npm scripts)
