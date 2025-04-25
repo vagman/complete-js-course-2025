@@ -26,11 +26,12 @@ console.log('Importing module');
 //   quantity,
 // } from './shoppingCart.js';
 import add, { cart, quantity } from './shoppingCart.js';
+
 add('pizza', 2);
 add('bread', 5);
 add('apples', 4);
 
-console.log(cart);
+console.log('cart:', cart);
 // Imports are not copies of the exports. They are a live connection: pointing in the same place in memory.
 
 // Lecture 285: Top-level await (ES2022)
@@ -58,8 +59,8 @@ console.log(lastPost);
 // Not very clean solution: use regular promise then()
 // lastPost.then(lastPost => console.log(lastPost));
 
-const lastPost1 = await getLastPost();
-console.log(lastPost1);
+// const lastPost1 = await getLastPost();
+// console.log(lastPost1);
 
 // Lecture 286: The Module Pattern
 // Step 1. Create an IIFE (Immidietly Invoked Function Expression)
@@ -109,7 +110,8 @@ ShoppingCart2.addToCart('pizza', 2);
 // "exports", "require", "module.exports" keywords are recopgnized by Node
 
 // Lecture 289. introduction to NPM
-import cloneDeep from './node_modules/lodash-es/cloneDeep.js';
+// import cloneDeep from './node_modules/lodash-es/cloneDeep.js';
+import cloneDeep from 'lodash-es';
 const state = {
   cart: [
     { productr: 'bread', quantity: 5 },
@@ -130,3 +132,10 @@ console.log('DeepClone: ', stateDeepClone);
 // Lecture 290: Bundling With Parcel and NPM Scripts
 // cd to currect working directory and then run: npm i parcel --save-dev
 // then run: npx parcel index.html (or the second option is to use npm scripts)
+
+// Code below triggers a rebuild whenever we make a change to one of the modules
+if (module.hot) {
+  module.hot.accept();
+}
+// Start the app: npm start (fires the script with name 'start' from package.json)
+// Build the app: npm build (fires the script with name 'build' from package.json)
