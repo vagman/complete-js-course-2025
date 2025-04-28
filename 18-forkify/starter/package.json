@@ -10,6 +10,7 @@
     "build": "parcel build index.html"
   },
   "devDependencies": {
+    "@parcel/transformer-inline-string": "^2.14.4",
     "@parcel/transformer-sass": "^2.14.4",
     "parcel": "^2.14.4"
   }
