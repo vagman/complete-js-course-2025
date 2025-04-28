@@ -37,6 +37,12 @@ const renderSpinner = parentElement => {
 
 const showRecipe = async function () {
   try {
+    // 0. Getting the ID of the recipe (hash)
+    const recipeId = window.location.hash.slice(1);
+
+    // Guard clause because we get Error 500 if recipeId is undefined
+    if (!recipeId) return;
+
     // 1. Loading recipe
     // const response = await fetch(
     //   `https://forkify-api.jonas.io/api/v2/recipes/5ed6604591c37cdc054bc886?key=<${API_KEY}>`
@@ -44,7 +50,7 @@ const showRecipe = async function () {
     renderSpinner(recipeContainer);
 
     const response = await fetch(
-      `https://forkify-api.jonas.io/api/v2/recipes/664c8f193e7aa067e94e8433?key=<${API_KEY}>`
+      `https://forkify-api.jonas.io/api/v2/recipes/${recipeId}`
     );
     const data = await response.json();
 
@@ -172,3 +178,15 @@ const showRecipe = async function () {
 };
 
 showRecipe();
+
+// Lecture 302: Listening For load and hashchange Events
+
+// DRY ! Duplicate Code when we cant to execute the same code for multiple fired events.
+// window.addEventListener('hashchange', showRecipe);
+// window.addEventListener('load', showRecipe);
+
+// Solution: Array of events
+['hashchange', 'load'].forEach(event =>
+  window.addEventListener(event, showRecipe)
+);
+// BUT now we get HTTP Error code 500 at http://localhost:1234/ because we have no recipeId (Step 0 in our try block in showRecipe() fails to get hash)
