@@ -7,14 +7,6 @@ import 'regenerator-runtime'; // Polyfill async await
 
 const API_KEY = process.env.PARCEL_API_KEY;
 
-const timeout = function (s) {
-  return new Promise(function (_, reject) {
-    setTimeout(function () {
-      reject(new Error(`Request took too long! Timeout after ${s} second`));
-    }, s * 1000);
-  });
-};
-
 // NEW API URL (instead of the one shown in the video)
 // https://forkify-api.jonas.io
 
@@ -35,7 +27,7 @@ const controlRecipes = async function () {
     recipeView.renderSpinner();
 
     // 1. Loading recipe
-    // Here we have an async function (controlRecipes()) calling inside her another async (loadrecipe()) and remeber that an async function always returns a promise which must be handled (await).
+    // Here we have an async function (controlRecipes()) calling inside her another async (loadRecipe()) and remeber that an async function always returns a promise which must be handled (await).
     await model.loadRecipe(recipeId);
 
     // 2. Rendering recipe

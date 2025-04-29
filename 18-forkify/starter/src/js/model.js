@@ -1,21 +1,16 @@
 // Module in which we will write out entire model.
 import { async } from 'regenerator-runtime';
+import { API_URL } from './config.js';
+import { getJSON } from './helpers.js';
 
 export const state = {
   recipe: {},
 };
 
+// Another example of an Async function (loadRecipe()) calling another Async function (getJSON())
 export const loadRecipe = async recipeId => {
   try {
-    const response = await fetch(
-      `https://forkify-api.jonas.io/api/v2/recipes/${recipeId}`
-    );
-    const data = await response.json();
-
-    if (!response.ok) throw new Error(`${data.message} (${response.status})`);
-
-    console.log(response, data);
-
+    const data = await getJSON(`${API_URL}/${recipeId}`);
     const { recipe } = data.data;
 
     state.recipe = {
@@ -30,6 +25,7 @@ export const loadRecipe = async recipeId => {
     };
     console.log(state.recipe);
   } catch (error) {
-    console.error(`ERROR: ${error}`);
+    // Temporary error handling
+    console.error(`ERROR: ${error} 💩💩💩`);
   }
 };
