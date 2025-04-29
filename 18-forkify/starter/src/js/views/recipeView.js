@@ -29,6 +29,17 @@ class RecipeView {
     this.#parentElement.insertAdjacentHTML('afterbegin', markup);
   };
 
+  addHandlerRender(handler) {
+    // Lecture 302: Listening For load and hashchange Events
+    // DRY ! Duplicate Code when we cant to execute the same code for multiple fired events.
+    // window.addEventListener('hashchange', controlRecipes);
+    // window.addEventListener('load', controlRecipes)
+    // Solution: Array of events
+    ['hashchange', 'load'].forEach(event =>
+      window.addEventListener(event, handler)
+    );
+  }
+
   #generateMarkup() {
     return `
       <figure class="recipe__fig">

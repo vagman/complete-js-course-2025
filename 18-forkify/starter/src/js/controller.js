@@ -39,16 +39,7 @@ const controlRecipes = async function () {
   }
 };
 
-controlRecipes();
-
-// Lecture 302: Listening For load and hashchange Events
-
-// DRY ! Duplicate Code when we cant to execute the same code for multiple fired events.
-// window.addEventListener('hashchange', controlRecipes);
-// window.addEventListener('load', controlRecipes);
-
-// Solution: Array of events
-['hashchange', 'load'].forEach(event =>
-  window.addEventListener(event, controlRecipes)
-);
-// BUT now we get HTTP Error code 500 at http://localhost:1234/ because we have no recipeId (Step 0 in our try block in controlRecipes() fails to get hash)
+const init = function () {
+  recipeView.addHandlerRender(controlRecipes);
+};
+init();
