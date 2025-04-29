@@ -5,12 +5,16 @@ import { getJSON } from './helpers.js';
 
 export const state = {
   recipe: {},
+  search: {
+    query: '',
+    results: [],
+  },
 };
 
 // Another example of an Async function (loadRecipe()) calling another Async function (getJSON())
 export const loadRecipe = async recipeId => {
   try {
-    const data = await getJSON(`${API_URL}/${recipeId}`);
+    const data = await getJSON(`${API_URL}${recipeId}`);
     const { recipe } = data.data;
 
     state.recipe = {
@@ -27,6 +31,28 @@ export const loadRecipe = async recipeId => {
   } catch (error) {
     // Temporary error handling
     console.error(`ERROR: ${error} 💩💩💩`);
+    throw error;
+  }
+};
+
+// Lectures 308 + 309: Implementing Search Results - Part 1 & 2
+// This function is going to be called by the controller who will tell her  what is should search for.
+export const loadSearchResults = async query => {
+  try {
+    state.search.query = query;
+
+    const data = await getJSON(`${API_URL}?search=${query}`);
+
+    state.search.results = data.data.recipes.map(recipe => {
+      return {
+        id: recipe.id,
+        image: recipe.image_url,
+        publisher: recipe.publisher,
+        title: recipe.title,
+      };
+    });
+  } catch (error) {
+    console.error(`ERROR: ${error}`);
     throw error;
   }
 };
