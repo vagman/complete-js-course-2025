@@ -2,9 +2,15 @@
 import * as model from './model.js';
 import recipeView from './views/recipeView.js';
 import searchRecipeView from './views/searchRecipeView.js';
+import resultsView from './views/resultsView.js';
 
 import 'core-js/stable'; // Polyfill everything except async/await
 import 'regenerator-runtime'; // Polyfill async await
+
+// Parcel code that refreshes the page every time a change is made
+if (module.hot) {
+  module.hot.accept();
+}
 
 const API_KEY = process.env.PARCEL_API_KEY;
 
@@ -42,6 +48,9 @@ const controlRecipes = async function () {
 
 const controlSearchResults = async function () {
   try {
+    // Render loading spinner
+    resultsView.renderSpinner();
+
     // 1) Get search query
     const query = searchRecipeView.getQuery();
     if (!query) return;
@@ -50,7 +59,7 @@ const controlSearchResults = async function () {
     await model.loadSearchResults(query);
 
     // 3) Render results
-    console.log(model.state.search.results);
+    resultsView.render(model.state.search.results);
   } catch (error) {
     console.error(error);
   }
