@@ -3,6 +3,7 @@ import spinner from 'bundle-text:../../img/spinner.svg';
 
 export default class View {
   _data;
+
   render(data) {
     // if (!data) won't work for an empty array []. only for undefined or null.
     if (!data || (Array.isArray(data) && data.length === 0)) {
@@ -54,7 +55,7 @@ export default class View {
             <use href="${icons}#icon-alert-triangle"></use>
           </svg>
         </div>
-        <p>${successMessage}</p>
+        <p>${sucessMessage}</p>
       </div>
       `;
     this._clearInnerHTML();

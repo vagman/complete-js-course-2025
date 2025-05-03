@@ -59,7 +59,7 @@ export const loadSearchResults = async query => {
   }
 };
 
-export const getSearchResultsPage = (page = startCase.search.page) => {
+export const getSearchResultsPage = (page = state.search.page) => {
   state.search.page = page;
 
   const start = (page - 1) * 10; // 0;
