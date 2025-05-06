@@ -12,8 +12,7 @@
   "devDependencies": {
     "@parcel/transformer-inline-string": "^2.14.4",
     "@parcel/transformer-sass": "^2.14.4",
-    "parcel": "^2.14.4",
-    "svgo": "^3.3.2"
+    "parcel": "^2.14.4"
   },
   "dependencies": {
     "fracty": "^1.0.12"

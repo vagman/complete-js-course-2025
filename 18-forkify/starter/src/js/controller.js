@@ -4,11 +4,12 @@ import recipeView from './views/recipeView.js';
 import searchRecipeView from './views/searchRecipeView.js';
 import resultsView from './views/resultsView.js';
 import paginationView from './views/paginationView.js';
+import icons from 'url:./../img/icons.svg';
 
 import 'core-js/stable'; // Polyfill everything except async/await
 import 'regenerator-runtime'; // Polyfill async await
 
-// Parcel code that refreshes the page every time a change is made
+// (It isn't JavaScript) Parcel code that refreshes the page every time a change is made
 if (module.hot) {
   module.hot.accept();
 }
@@ -61,7 +62,7 @@ const controlSearchResults = async function () {
 
     // 3) Render results
     // resultsView.render(model.state.search.results);
-    resultsView.render(model.getSearchResultsPage(2));
+    resultsView.render(model.getSearchResultsPage());
 
     // 4) Render initial pagination buttons
     paginationView.render(model.state.search);
@@ -70,8 +71,17 @@ const controlSearchResults = async function () {
   }
 };
 
+const controlPagination = goToPageNumber => {
+  // 1) Render NEW results
+  resultsView.render(model.getSearchResultsPage(goToPageNumber));
+
+  // 2) Render NEW pagination buttons
+  paginationView.render(model.state.search);
+};
+
 const init = function () {
   recipeView.addHandlerRender(controlRecipes);
   searchRecipeView.addHanlderSearch(controlSearchResults);
+  paginationView.addHandlerClick(controlPagination);
 };
 init();

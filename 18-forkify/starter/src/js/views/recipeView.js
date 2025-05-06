@@ -10,7 +10,7 @@ class RecipeView extends View {
 
   addHandlerRender(handler) {
     // Lecture 302: Listening For load and hashchange Events
-    // DRY ! Duplicate Code when we cant to execute the same code for multiple fired events.
+    // DRY: Duplicate Code when we want to execute the same code for multiple fired events.
     // window.addEventListener('hashchange', controlRecipes);
     // window.addEventListener('load', controlRecipes)
     // Solution: Array of events

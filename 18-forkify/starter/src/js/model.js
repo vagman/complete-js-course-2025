@@ -62,7 +62,8 @@ export const loadSearchResults = async query => {
 export const getSearchResultsPage = (page = state.search.page) => {
   state.search.page = page;
 
-  const start = (page - 1) * 10; // 0;
-  const end = page * state.search.resultsPerPage; // 9 * 10;
-  return state.search.results.slice(start, end);
+  const start = (page - 1) * 10; // On page = 1, start = 0 (0-based);
+  const end = page * state.search.resultsPerPage; // So end will be 1 * 10;
+
+  return state.search.results.slice(start, end); // 10 recipes on the first page
 };
