@@ -4,17 +4,16 @@ import recipeView from './views/recipeView.js';
 import searchRecipeView from './views/searchRecipeView.js';
 import resultsView from './views/resultsView.js';
 import paginationView from './views/paginationView.js';
-import icons from 'url:./../img/icons.svg';
 
 import 'core-js/stable'; // Polyfill everything except async/await
 import 'regenerator-runtime'; // Polyfill async await
 
 // (It isn't JavaScript) Parcel code that refreshes the page every time a change is made
-if (module.hot) {
-  module.hot.accept();
-}
+// if (module.hot) {
+//   module.hot.accept();
+// }
 
-const API_KEY = process.env.PARCEL_API_KEY;
+const API_KEY = import.meta.env.VITE_API_KEY;
 
 // NEW API URL (instead of the one shown in the video)
 // https://forkify-api.jonas.io
@@ -77,6 +76,14 @@ const controlPagination = goToPageNumber => {
 
   // 2) Render NEW pagination buttons
   paginationView.render(model.state.search);
+};
+
+const controlServings = () => {
+  // 1. Update the recipe servings (in the state) - updating the underlying data
+  model.updateServings(4);
+
+  // 2. Update the recipeView
+  recipeView.render(model.state.recipe);
 };
 
 const init = function () {

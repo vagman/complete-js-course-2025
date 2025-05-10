@@ -67,3 +67,14 @@ export const getSearchResultsPage = (page = state.search.page) => {
 
   return state.search.results.slice(start, end); // 10 recipes on the first page
 };
+
+export const updateServings = newServings => {
+  state.recipe.ingredients.forEach(ingredient => {
+    ingredient.quantity =
+      (ingredient.quantity * newServings) / state.recipe.servings;
+    // newQuantity = oldQuantity * newQuantity / oldServings
+    // 2 * 8 / 4 = 4
+  });
+  // We are updating the original value of servings at the end of the function because otherwise we could not preserve the original value state.recipe.servings.
+  state.recipe.servings = newServings;
+};

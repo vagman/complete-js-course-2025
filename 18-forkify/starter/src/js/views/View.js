@@ -1,5 +1,5 @@
-import icons from 'url:../../img/icons.svg';
-import spinner from 'bundle-text:../../img/spinner.svg';
+import icons from '../../img/icons.svg';
+import spinner from '../../img/spinner.svg';
 
 export default class View {
   _data;

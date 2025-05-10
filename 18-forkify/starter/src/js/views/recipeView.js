@@ -1,5 +1,5 @@
 import View from './View.js';
-import icons from 'url:../../img/icons.svg';
+import icons from '../../img/icons.svg';
 import fracty from 'fracty';
 
 class RecipeView extends View {
@@ -17,6 +17,13 @@ class RecipeView extends View {
     ['hashchange', 'load'].forEach(event =>
       window.addEventListener(event, handler)
     );
+  }
+
+  addHandlerUpdateServings(handler) {
+    this._parentElement.addEventListener('click', e => {
+      const btn = e.target.closest('.btn--tiny');
+      console.loh(btn);
+    });
   }
 
   _generateMarkup() {
