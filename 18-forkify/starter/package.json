@@ -10,10 +10,12 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "core-js": "^3.42.0",
     "sass": "^1.69.5",
     "vite": "^6.3.5"
   },
   "dependencies": {
-    "fracty": "^1.0.12"
+    "fracty": "^1.0.12",
+    "regenerator-runtime": "^0.14.1"
   }
 }

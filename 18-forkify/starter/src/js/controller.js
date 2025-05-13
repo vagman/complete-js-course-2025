@@ -1,4 +1,3 @@
-// import icons from '../img/icons.svg'; // Parcel v.1.xxx
 import * as model from './model.js';
 import recipeView from './views/recipeView.js';
 import searchRecipeView from './views/searchRecipeView.js';
@@ -6,7 +5,7 @@ import resultsView from './views/resultsView.js';
 import paginationView from './views/paginationView.js';
 
 import 'core-js/stable'; // Polyfill everything except async/await
-import 'regenerator-runtime'; // Polyfill async await
+import 'regenerator-runtime/runtime'; // Polyfill async await
 
 // (It isn't JavaScript) Parcel code that refreshes the page every time a change is made
 // if (module.hot) {
