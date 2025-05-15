@@ -84,7 +84,7 @@ const controlServings = newServings => {
   model.updateServings(newServings);
 
   // 2. Update the recipeView
-  recipeView.render(model.state.recipe);
+  recipeView.update(model.state.recipe);
 };
 
 const init = function () {
