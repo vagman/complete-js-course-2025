@@ -18,6 +18,39 @@ export default class View {
     this._parentElement.insertAdjacentHTML('afterbegin', markup);
   }
 
+  update(data) {
+    if (!data || (Array.isArray(data) && data.length === 0)) {
+      return this.renderErrorMessage();
+    }
+
+    this._data = data;
+    const newMarkup = this._generateMarkup();
+
+    const newDOM = document.createRange().createContextualFragment(newMarkup);
+    const newElements = Array.from(newDOM.querySelectorAll('*'));
+    const currentElements = Array.from(
+      this._parentElement.querySelectorAll('*')
+    );
+
+    // Checking which elements of the pages have changed and push them to an array
+    // Then render only them when clicking on a diffrent recipe
+    newElements.forEach((newElement, index) => {
+      const currentElement = currentElements[index];
+      // Updates changed TEXT
+      if (
+        !newElement.isEqualNode(currentElement) &&
+        newElement.firstChild?.nodeValue.trim() !== ''
+      ) {
+        currentElement.textContent = newElement.textContent;
+      }
+      // Updates changed ATTRIBUTES
+      if (!newElement.isEqualNode(currentElement))
+        Array.from(newElement.attributes).forEach(attribute =>
+          currentElement.setAttribute(attribute.name, attribute.value)
+        );
+    });
+  }
+
   _clearInnerHTML() {
     this._parentElement.innerHTML = '';
   }

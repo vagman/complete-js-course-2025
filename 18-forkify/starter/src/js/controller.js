@@ -17,7 +17,6 @@ const API_KEY = import.meta.env.VITE_API_KEY;
 // NEW API URL (instead of the one shown in the video)
 // https://forkify-api.jonas.io
 
-///////////////////////////////////////
 // Lecture 300: Loading a Recipe from API
 // Step 1: npm init
 // Step 2: write parcel start and build scripts in package.json
@@ -32,6 +31,9 @@ const controlRecipes = async function () {
     // Guard clause because we get Error 500 if recipeId is undefined
     if (!recipeId) return;
     recipeView.renderSpinner();
+
+    // Update results view to mark currently selected search result
+    resultsView.update(model.getSearchResultsPage());
 
     // 1. Loading recipe
     // Here we have an async function (controlRecipes()) calling inside her another async (loadRecipe()) and remeber that an async function always returns a promise which must be handled (await).

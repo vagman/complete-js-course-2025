@@ -1,5 +1,4 @@
 // Module in which we will write out entire model.
-import { async } from 'regenerator-runtime';
 import { API_URL, RESULTS_PER_PAGE } from './config.js';
 import { getJSON } from './helpers.js';
 
@@ -42,7 +41,6 @@ export const loadRecipe = async recipeId => {
 export const loadSearchResults = async query => {
   try {
     state.search.query = query;
-
     const data = await getJSON(`${API_URL}?search=${query}`);
 
     state.search.results = data.data.recipes.map(recipe => {
@@ -53,6 +51,9 @@ export const loadSearchResults = async query => {
         title: recipe.title,
       };
     });
+
+    // FIX: Reset the page number to 1 when a recipe is already rendered before and we're in page 3 and going for a new search
+    state.search.page = 1;
   } catch (error) {
     console.error(`ERROR: ${error}`);
     throw error;
