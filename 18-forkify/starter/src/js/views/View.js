@@ -4,7 +4,7 @@ import spinner from '../../img/spinner.svg';
 export default class View {
   _data;
 
-  render(data) {
+  render(data, render = true) {
     // if (!data) won't work for an empty array []. only for undefined or null.
     if (!data || (Array.isArray(data) && data.length === 0)) {
       return this.renderErrorMessage();
@@ -12,6 +12,8 @@ export default class View {
 
     this._data = data;
     const markup = this._generateMarkup();
+
+    if (!render) return markup;
 
     // Initialization - Setting the container HTML to empty before filling with useful info in order to make the message dissapear: "Start by searching for a recipe or an ingredient. Have fun!"
     this._clearInnerHTML();
