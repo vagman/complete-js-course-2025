@@ -56,7 +56,7 @@ export default class View {
   renderSpinner = () => {
     const markup = `
       <div class="spinner">
-        ${spinner}
+        <img src="${spinner}" alt="Loading..." class="spinner-img" />
       </div>
     `;
     this._clearInnerHTML();

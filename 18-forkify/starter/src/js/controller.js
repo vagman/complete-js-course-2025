@@ -4,16 +4,10 @@ import searchRecipeView from './views/searchRecipeView.js';
 import resultsView from './views/resultsView.js';
 import paginationView from './views/paginationView.js';
 import bookmarksView from './views/bookmarksView.js';
+import addRecipeView from './views/addRecipeView.js';
 
 import 'core-js/stable'; // Polyfill everything except async/await
 import 'regenerator-runtime/runtime'; // Polyfill async await
-
-// (It isn't JavaScript) Parcel code that refreshes the page every time a change is made
-// if (module.hot) {
-//   module.hot.accept();
-// }
-
-const API_KEY = import.meta.env.VITE_API_KEY;
 
 // NEW API URL (instead of the one shown in the video)
 // https://forkify-api.jonas.io
@@ -33,22 +27,23 @@ const controlRecipes = async function () {
     if (!recipeId) return;
     recipeView.renderSpinner();
 
-    // Update results view to mark currently selected search result
+    // 0. Update results view to mark currently selected search result
     resultsView.update(model.getSearchResultsPage());
 
-    // 1) Updating bookmarks view
+    // 1. Updating bookmarks view
     bookmarksView.update(model.state.bookmarks);
 
-    // 1. Loading recipe
+    // 2. Loading recipe
     // Here we have an async function (controlRecipes()) calling inside her another async (loadRecipe()) and remeber that an async function always returns a promise which must be handled (await).
     await model.loadRecipe(recipeId);
 
-    // 2. Rendering recipe
+    // 3. Rendering recipe
     recipeView.render(model.state.recipe);
     // If we did export the entire recipeView class then here would you write:
     // const recipeView = new recipeView(model.state.recipe);
   } catch (error) {
     recipeView.renderErrorMessage();
+    console.error(error);
   }
 };
 
@@ -107,6 +102,16 @@ const controlBookmarks = function () {
   bookmarksView.render(model.state.bookmarks);
 };
 
+const controlAddRecipe = async newRecipe => {
+  try {
+    // Upload the new recipe data
+    await model.uploadNewRecipe(newRecipe);
+  } catch (error) {
+    console.error(`💣💣💣ERROR: ${error}`);
+    addRecipeView.renderErrorMessage(error.message);
+  }
+};
+
 const init = function () {
   bookmarksView.addHandlerRender(controlBookmarks);
   recipeView.addHandlerRender(controlRecipes);
@@ -114,5 +119,6 @@ const init = function () {
   recipeView.addHandlerAddBookmark(controlAddBookmark);
   searchRecipeView.addHanlderSearch(controlSearchResults);
   paginationView.addHandlerClick(controlPagination);
+  addRecipeView.addHandlerUploadRecipe(controlAddRecipe);
 };
 init();

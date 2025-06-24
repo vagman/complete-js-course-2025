@@ -1,6 +1,6 @@
 // Module in which we will write out entire model.
-import { API_URL, RESULTS_PER_PAGE } from './config.js';
-import { getJSON } from './helpers.js';
+import { API_URL, RESULTS_PER_PAGE, API_KEY } from './config.js';
+import { getJSON, sendJSON } from './helpers.js';
 
 export const state = {
   recipe: {},
@@ -109,4 +109,51 @@ export const deleteBookmark = function (id) {
   if (id === state.recipe.id) state.recipe.bookmarked = false;
 
   persistBookmarks();
+};
+
+const init = function () {
+  const storage = localStorage.getItem('bookmarks');
+  if (storage) state.bookmarks = JSON.parse(storage);
+};
+init();
+
+// CALL ONLY FOR DEVELEPMENT: clear all bookmarks
+const clearBookmarks = function () {
+  localStorage.clear('bookmarks');
+};
+// clearBookmarks();
+
+export const uploadNewRecipe = async newRecipe => {
+  try {
+    // Convert Object to Array in order to use map() and get all ingredients..
+    // const ingredients = Object.entries(newRecipe).filter(entry => );
+    const ingredients = Object.entries(newRecipe)
+      .filter(entry => entry[0].startsWith('ingredient') && entry[1] !== '')
+      .map(ingredient => {
+        const ingredientsArray = ingredient[1].replaceAll(' ', '').split(',');
+        if (ingredientsArray.length !== 3)
+          throw new Error(
+            'Wrong ingredient format! Please use trhe correct format :)'
+          );
+        const [quantity, unit, description] = ingredientsArray;
+
+        // If there is quantity then convert it to Number otherwise (empty string) set it to null+
+        return { quantity: quantity ? +quantity : null, unit, description };
+      });
+
+    const recipe = {
+      title: newRecipe.title,
+      source_url: newRecipe.sourceUrl,
+      image_url: newRecipe.image,
+      publisher: newRecipe.publisher,
+      cookingTime: +newRecipe.cookingTime,
+      servings: +newRecipe.servings,
+      ingredients,
+    };
+
+    const data = await sendJSON(`${API_URL}?key=${API_KEY}`, recipe);
+    console.log(data);
+  } catch (error) {
+    throw error;
+  }
 };
