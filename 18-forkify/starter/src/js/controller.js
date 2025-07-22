@@ -34,7 +34,7 @@ const controlRecipes = async function () {
     bookmarksView.update(model.state.bookmarks);
 
     // 2. Loading recipe
-    // Here we have an async function (controlRecipes()) calling inside her another async (loadRecipe()) and remeber that an async function always returns a promise which must be handled (await).
+    // Here we have an async function (controlRecipes()) calling inside her another async (loadRecipe()) and remember that an async function always returns a promise which must be handled (await).
     await model.loadRecipe(recipeId);
 
     // 3. Rendering recipe
@@ -117,7 +117,7 @@ const init = function () {
   recipeView.addHandlerRender(controlRecipes);
   recipeView.addHandlerUpdateServings(controlServings);
   recipeView.addHandlerAddBookmark(controlAddBookmark);
-  searchRecipeView.addHanlderSearch(controlSearchResults);
+  searchRecipeView.addHandlerSearch(controlSearchResults);
   paginationView.addHandlerClick(controlPagination);
   addRecipeView.addHandlerUploadRecipe(controlAddRecipe);
 };

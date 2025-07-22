@@ -30,16 +30,18 @@ class AddRecipeView extends View {
       'click',
       this.toggleRecipeModal.bind(this)
     );
+    this._overlay.addEventListener('click', this.toggleRecipeModal.bind(this));
   }
 
   addHandlerUploadRecipe(handler) {
     this._parentElement.addEventListener('submit', e => {
       e.preventDefault();
 
-      // FormData takes a form as an arguement
+      // FormData takes a form as an argument
       const dataArray = [...new FormData(this._parentElement)];
       // Convert Entries to Object
       const data = Object.fromEntries(dataArray);
+      console.log(data);
       handler(data);
     });
   }

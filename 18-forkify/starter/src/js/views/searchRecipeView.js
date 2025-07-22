@@ -13,8 +13,8 @@ class SearchRecipeView {
     this._parentElement.querySelector('.search__field').value = '';
   }
 
-  // Submiting a form will fire the event no matter if the user clicks 'Submit' or hits 'Enter'
-  addHanlderSearch(handler) {
+  // Submitting a form will fire the event no matter if the user clicks 'Submit' or hits 'Enter'
+  addHandlerSearch(handler) {
     this._parentElement.addEventListener('submit', e => {
       e.preventDefault();
       return handler();

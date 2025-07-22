@@ -117,7 +117,7 @@ const init = function () {
 };
 init();
 
-// CALL ONLY FOR DEVELEPMENT: clear all bookmarks
+// CALL ONLY FOR DEVELOPMENT: clear all bookmarks
 const clearBookmarks = function () {
   localStorage.clear('bookmarks');
 };
@@ -133,7 +133,7 @@ export const uploadNewRecipe = async newRecipe => {
         const ingredientsArray = ingredient[1].replaceAll(' ', '').split(',');
         if (ingredientsArray.length !== 3)
           throw new Error(
-            'Wrong ingredient format! Please use trhe correct format :)'
+            'Wrong ingredient format! Please use the correct format :)'
           );
         const [quantity, unit, description] = ingredientsArray;
 
@@ -146,7 +146,7 @@ export const uploadNewRecipe = async newRecipe => {
       source_url: newRecipe.sourceUrl,
       image_url: newRecipe.image,
       publisher: newRecipe.publisher,
-      cookingTime: +newRecipe.cookingTime,
+      cooking_time: +newRecipe.cookingTime,
       servings: +newRecipe.servings,
       ingredients,
     };
