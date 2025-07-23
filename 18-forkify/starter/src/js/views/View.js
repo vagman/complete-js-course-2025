@@ -15,7 +15,7 @@ export default class View {
 
     if (!render) return markup;
 
-    // Initialization - Setting the container HTML to empty before filling with useful info in order to make the message dissapear: "Start by searching for a recipe or an ingredient. Have fun!"
+    // Initialization - Setting the container HTML to empty before filling with useful info in order to make the message disappear: "Start by searching for a recipe or an ingredient. Have fun!"
     this._clearInnerHTML();
     this._parentElement.insertAdjacentHTML('afterbegin', markup);
   }
@@ -31,7 +31,7 @@ export default class View {
     );
 
     // Checking which elements of the pages have changed and push them to an array
-    // Then render only them when clicking on a diffrent recipe
+    // Then render only them when clicking on a different recipe
     newElements.forEach((newElement, index) => {
       const currentElement = currentElements[index];
       // Updates changed TEXT
@@ -78,7 +78,7 @@ export default class View {
     this._parentElement.insertAdjacentHTML('afterbegin', markup);
   };
 
-  renderSuccessMessage = (sucessMessage = this._successMessage) => {
+  renderSuccessMessage = (successMessage = this._successMessage) => {
     const markup = `
       <div class="error">
         <div>
@@ -86,7 +86,7 @@ export default class View {
             <use href="${icons}#icon-alert-triangle"></use>
           </svg>
         </div>
-        <p>${sucessMessage}</p>
+        <p>${successMessage}</p>
       </div>
       `;
     this._clearInnerHTML();

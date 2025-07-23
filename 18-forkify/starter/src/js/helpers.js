@@ -27,7 +27,7 @@ export const getJSON = async url => {
 
 export const sendJSON = async (url, uploadData) => {
   try {
-    // fetch() apart from thje URL, it needs an options object to send data !
+    // fetch() apart from the URL, it needs an options object to send data !
     const response = await Promise.race([
       fetch(url, {
         method: 'POST',

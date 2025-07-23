@@ -13,22 +13,28 @@ export const state = {
   bookmarks: [],
 };
 
+const createRecipeObject = function (data) {
+  const { recipe } = data.data;
+  return {
+    id: recipe.id,
+    title: recipe.title,
+    publisher: recipe.publisher,
+    sourceUrl: recipe.source_url,
+    image: recipe.image_url,
+    servings: recipe.servings,
+    cookingTime: recipe.cooking_time,
+    ingredients: recipe.ingredients,
+    // Short-circuiting: if recipe.key is a falsy value e.g. null/undefined then nothing happens.
+    // If it is a truthy value then the second part is executed and returned: key: recipe.key
+    ...(recipe.key && { key: recipe.key }),
+  };
+};
+
 // Another example of an Async function (loadRecipe()) calling another Async function (getJSON())
 export const loadRecipe = async recipeId => {
   try {
     const data = await getJSON(`${API_URL}${recipeId}`);
-    const { recipe } = data.data;
-
-    state.recipe = {
-      id: recipe.id,
-      title: recipe.title,
-      publisher: recipe.publisher,
-      sourceUrl: recipe.source_url,
-      image: recipe.image_url,
-      servings: recipe.servings,
-      cookingTime: recipe.cooking_time,
-      ingredients: recipe.ingredients,
-    };
+    state.recipe = createRecipeObject(data);
 
     if (state.bookmarks.some(bookmark => bookmark.id === recipeId))
       state.recipe.bookmarked = true;
@@ -136,7 +142,6 @@ export const uploadNewRecipe = async newRecipe => {
             'Wrong ingredient format! Please use the correct format :)'
           );
         const [quantity, unit, description] = ingredientsArray;
-
         // If there is quantity then convert it to Number otherwise (empty string) set it to null+
         return { quantity: quantity ? +quantity : null, unit, description };
       });
@@ -150,9 +155,9 @@ export const uploadNewRecipe = async newRecipe => {
       servings: +newRecipe.servings,
       ingredients,
     };
-
     const data = await sendJSON(`${API_URL}?key=${API_KEY}`, recipe);
-    console.log(data);
+    state.recipe = createRecipeObject(data);
+    addBookmark(state.recipe);
   } catch (error) {
     throw error;
   }

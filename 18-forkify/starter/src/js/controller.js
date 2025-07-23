@@ -5,6 +5,7 @@ import resultsView from './views/resultsView.js';
 import paginationView from './views/paginationView.js';
 import bookmarksView from './views/bookmarksView.js';
 import addRecipeView from './views/addRecipeView.js';
+import { MODAL_CLOSE_SEC } from './config.js';
 
 import 'core-js/stable'; // Polyfill everything except async/await
 import 'regenerator-runtime/runtime'; // Polyfill async await
@@ -104,8 +105,22 @@ const controlBookmarks = function () {
 
 const controlAddRecipe = async newRecipe => {
   try {
+    // Render spinner for better UX
+    addRecipeView.renderSpinner();
+
     // Upload the new recipe data
     await model.uploadNewRecipe(newRecipe);
+    console.log(model.state.recipe);
+
+    // Render recipe
+    recipeView.render(model.state.recipe);
+
+    // Success message
+    addRecipeView.renderSuccessMessage();
+    // Close recipe modal to view rendered recipe
+    setTimeout(() => {
+      addRecipeView.toggleRecipeModal();
+    }, MODAL_CLOSE_SEC * 1000);
   } catch (error) {
     console.error(`💣💣💣ERROR: ${error}`);
     addRecipeView.renderErrorMessage(error.message);
