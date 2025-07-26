@@ -117,6 +117,13 @@ const controlAddRecipe = async newRecipe => {
 
     // Success message
     addRecipeView.renderSuccessMessage();
+
+    // Render bookmark view
+    bookmarksView.render(model.state.bookmarks);
+
+    // Change ID in URL - FIXES BUG: reloading the page after creating a recipe doesn't go to home page: http://localhost:5137/
+    window.history.pushState(null, '', `#${model.state.recipe.id}`);
+
     // Close recipe modal to view rendered recipe
     setTimeout(() => {
       addRecipeView.toggleRecipeModal();

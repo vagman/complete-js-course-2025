@@ -4,6 +4,15 @@ import spinner from '../../img/spinner.svg';
 export default class View {
   _data;
 
+  /** ---- JS Documentation -----
+   * Render the received object to the DOM
+   * @param {Object | Object[]} data The data to be rendered (e.g. recipe)
+   * @param {boolean} [render=true] If false, create markup string instead of rendering to the DOM
+   * @returns {undefined | string} A markup string is returned if render=false
+   * @this {Object} point to the View instance
+   * @author Vaggelis Manousakis
+   * @todo Finish implementation
+   */
   render(data, render = true) {
     // if (!data) won't work for an empty array []. only for undefined or null.
     if (!data || (Array.isArray(data) && data.length === 0)) {

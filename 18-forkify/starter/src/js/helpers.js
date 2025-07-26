@@ -11,6 +11,30 @@ const timeout = function (s) {
   });
 };
 
+export const AJAX = async (url, uploadData = undefined) => {
+  try {
+    const fetchPromise = uploadData
+      ? fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(uploadData),
+        })
+      : fetch(url);
+
+    const response = await Promise.race([fetchPromise, timeout(TIMEOUT_SEC)]);
+    const data = await response.json();
+
+    if (!response.ok) throw new Error(`${data.message} (${response.status})`);
+    return data;
+  } catch (error) {
+    // The promise that is being returned from getJSON() will actually reject by throwing a new error here. Therefore we will be able to handle the error inside model.js/loadRecipe() catch block
+    throw error;
+  }
+};
+
+/*
 // 1. Function that will get our JSON after fetching data
 export const getJSON = async url => {
   try {
@@ -46,4 +70,4 @@ export const sendJSON = async (url, uploadData) => {
     // The promise that is being returned from getJSON() will actually reject by throwing a new error here. Therefore we will be able to handle the error inside model.js/loadRecipe() catch block
     throw error;
   }
-};
+*/
